@@ -1,0 +1,119 @@
+\tikzset{%
+	% Self defined bulding blocks. 
+	% Nevertheless circutikz has implemented filters, couplers and other components since version 0.4, they are mostly implemented as bipoles.
+	% The usage of bipoles: \draw (start) to[lowpass/amp/adc,....] (end).
+	% The problem is, that if one wants to use arrows, the arrows in bipoles can not be sat manual (fixed in circuitikz source) AND THEY ARE NOT CONSISTENT
+	% Also it's quite a mess, which component is a monopole, simple block, bipol, quad/triple etc
+	% Following are a few examples on how to define your own blocks. 
+	%
+	% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+	% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+	% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+	% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+	%
+	% Standard block definition, the width and height is adopted from the circutizk source code, so don't mind the strange values. Also the linewidth is set according to the circutrikz source code.
+	block/.style    	= 	{draw, fill=white, thick, rectangle, minimum height = 0.98cm, minimum width = 0.98cm, node distance=2.5cm, line width=1.5pt},
+	%
+	% Standard circular block
+	circleblock/.style	= 	{draw, fill=white, thick, circle, minimum width = 0.98cm,  line width=1.5pt, node distance=2.5cm},
+	%
+	% Label for circuitikz nodes, as they're reference is in the middle and not on the outer edge of the node....
+	circuitikzlabel/.style	=	{label={[label, label distance=0.5cm]#1}},
+	%
+	%
+	%
+	% VCO/Oscillator 
+	myVCO/.style			= 	{circleblock, path picture={%
+		\draw[line width=0.75pt] 	($(path picture bounding box.west)+(0.09cm,0)$) sin ($(path picture bounding box.center)-(0.2cm,-0.2cm)$) cos  (path picture bounding box.center) sin ($(path picture bounding box.center)-(-0.2cm,0.2cm)$) cos ($(path picture bounding box.east)-(0.09cm,0)$);
+		}
+	},
+	% Amplifier, as circuitikz does only provite amplifiers as 2-ports/bipoles
+	myAMP/.style		= 	{block, node distance=2.5cm, path picture={%
+		\draw[fill=white, line width=0.75pt] ($(path picture bounding box.center)+(0.7em,0)$) -- ($(path picture bounding box.center)-(0.7em,-0.7em)$) -- ($(path picture bounding box.center)-(0.7em,0.7em)$)  -- cycle;
+		}
+	},%%
+	%myVAMP
+	myVAMP/.style		= 	{block, node distance=2.5cm, path picture={%
+		\draw[fill=white, line width=0.75pt] ($(path picture bounding box.center)+(0.7em,0)$) -- ($(path picture bounding box.center)-(0.7em,-0.7em)$) -- ($(path picture bounding box.center)-(0.7em,0.7em)$)  -- cycle;
+		\draw[fill=white, line width =  0.75pt,<-]($(path picture bounding box.center)+(0.75em,0.6em)$) -- ($(path picture bounding box.center)-(0.75em,0.6em)$);
+		}
+	},%%	
+	% Block	
+	myBlock/.style    	= 	{draw, fill=white, thick, rectangle, minimum height = 0.98cm, minimum width = 0.98cm, node distance=2.5cm, line width=1.5pt},
+	myBigBlock/.style    	= 	{draw, fill=white, thick, rectangle, minimum height = 0.98cm, minimum width = 2.94cm, node distance=2.5cm, line width=1.5pt},	
+	% Same for ADC
+	myADC/.style 	=	{block, path picture={%
+		\draw[line width=0.75pt] 	(path picture bounding box.south west) -- (path picture bounding box.north east);
+		\node[] at ($(path picture bounding box.center)+(-.5em,.5em)$) () {D};
+		\node[] at ($(path picture bounding box.center)+(.5em,-.5em)$) () {A};
+		} 
+	},
+	% Same for filters
+	myLP/.style	=	{block, path picture={%
+		%Sine-Waves
+		\draw[line width=.75pt] 	($(path picture bounding box.west)+(0.3em,0)$) sin ($(path picture bounding box.center)-(0.50em,-0.3em)$) cos  (path picture bounding box.center) sin ($(path picture bounding box.center)-(-0.50em,0.3em)$) cos ($(path picture bounding box.east)-(0.3em,0)$);
+		\draw[line width=0.75pt] 	($(path picture bounding box.west)+(0.3em,-0.65em)$) sin ($(path picture bounding box.center)-(0.50em,0.35em)$) cos  ( $(path picture bounding box.center)-(0,0.65em)$) sin ($(path picture bounding box.center)-(-0.50em,0.95em)$) cos ($(path picture bounding box.east)-(0.3em,0.65em)$);
+		\draw[line width=0.75pt] 	($(path picture bounding box.west)+(0.3em,0.65em)$) sin ($(path picture bounding box.center)-(0.50em,-0.95em)$) cos  ( $(path picture bounding box.center)+(0,0.65em)$) sin ($(path picture bounding box.center)-(-0.50em,-0.35em)$) cos ($(path picture bounding box.east)-(0.3em,-0.65em)$);
+		% Cancelation
+		\draw[line width=0.75pt] 	($(path picture bounding box.center)-(0.2em,0.2em)$) -- (path picture bounding box.center) -- ($(path picture bounding box.center)+(0.2em,0.2em)$) ;
+		\draw[line width=0.75pt] 	($(path picture bounding box.center)-(0.2em,-0.45em)$) -- ($(path picture bounding box.center)+(0,0.65em)$) -- ($(path picture bounding box.center)+(0.2em,0.85em)$) ;
+		}
+	},
+}
+\begin{tikzpicture}[line width=0.7pt,>=latex,node distance=2.5cm,scale = 0.8]
+	% First: All building blocks are placed relative to the first component
+	\draw (0,0)
+		node[](RF){}
+		node[myAMP, right of = RF,label={above:\scriptsize{10dB}}] (ADA4937) {}		
+		node[myVAMP,right of = ADA4937,label={above:\scriptsize{0dB bis 40dB}}](HMC960){}
+		node[myVAMP, right of = HMC960,label={above:\scriptsize{0dB o. 10dB}}](HMC9001){}
+		node[myLP, right of = HMC9001, node distance = 1.5cm,label={above:\scriptsize{6. Order}}](HMC9002){}
+		node[myAMP, right of = HMC9002,node distance = 1.5cm,label={above:\scriptsize{Treiber}}](HMC9003){}
+		node[myAMP, right of = HMC9003,label={above:\scriptsize{1337dB}}](AD8034){}
+		node[right of = AD8034](pe){};	
+	\draw[-o](AD8034.east)--node[above](){zu ADC}(pe.west);
+	
+	%Mixer -> ADA4937
+	\draw[o-](0.4,0.4)--node[above](){von RF}(2.5,0.4);
+	\draw[o-](0.4,-0.4)--(2.5,-0.4);
+	
+	%ADA4937-> HMC960
+	\draw[-](3.7,0.4) --(5.6,0.4);
+	\draw[-](3.7,-0.4)--(5.6,-0.4);
+	
+	%HMC960 -> HMC900
+	\draw[-](6.85,0.4)--(8.7,0.4);
+	\draw[-](6.85,-0.4)--(8.7,-0.4);
+	
+	%HMC900intern
+	\draw[-](9.95,0.4)--(10.65,0.4);
+	\draw[-](9.95,-0.4)--(10.65,-0.4);
+	%HMC900intern
+	\draw[-](11.85,0.4)--(12.5,0.4);
+	\draw[-](11.85,-0.4)--(12.5,-0.4);
+	
+	%HMC900->AD8034
+	\draw[-](13.75,0.4)--(15.65,0.4);
+	\draw[-](13.75,-0.4)--(15.65,-0.4);
+	
+	%Box um HMC900
+	\draw[-](8.2,-1.5)rectangle(14.25,1.5);
+
+	%Label Radar
+
+	%Label ADA4937
+	\draw(3.1,2.4)
+		node[label={below:ADA4937-2}](){};
+	
+	%Label HMC960
+	\draw(6.2,2.4)
+		node[label={below:HMC960}](){};
+		
+	%Label HMC900
+	\draw(11.2,2.4)
+		node[label={below:HMC900}](){};
+		
+	%Label AD8034
+	\draw(16.2,2.4)
+		node[label={below:AD8034}](){};
+\end{tikzpicture}

@@ -1,0 +1,76 @@
+v1.10 (Castle Machinery)
+- changed part of comment in header to english
+- added setting in makefile to not delete the pdf file in watch process (4f6f297)
+- changed order of mathematics and graphics packes to get rid of 'Package etex Warning: Extended
+  allocation already in use.' (0fcb5dd)
+- added package for if-else structure (f107ab8)
+- added support for 'polar' PGFPlots (dc46a41)
+- the option to set the fontsize is now 'fontsize=9pt,' and for a5 papers a 'DIV=calc,' can be useful (e10620a)
+- added makefile with support of 'make', 'make watch' (continuously watch for changes and compile),
+  'make clean', and 'make vclean' (b67c44b)
+- deactivated PDF properties settings by default, due to students didn't change the default values (4fdd423)
+
+v1.9 (Sunset Vista)
+- added a termporary fix to enable the svg package support with Tex Live 2016 until the package
+  maintainer released a new version.
+- The README now promotes the `surf3tikz` function.
+
+v1.8 (Slippery Climb)
+- In the English version in the declaration 'University of Ulm' was used, this is corrected to 'Ulm
+  University'.
+- For the German version the adapted version of the IEEE style does not have the serial comma before
+  the 'und' before the last author.
+- The literature example now correctly uses the month abbreviation.
+- The help for PGFPlots is enhanced.
+- As an alternative to biblatex, a biber version is added, but deactivated.
+
+v1.7 (Boulder Dash)
+- in newer Tex Live versions the use of `\sc` is not possible any more and therefore results in an
+  error. Therefore the bibliography styles 'unsrt' and 'gerunsrt' are no longer supported. Therefore
+  the IEEE style is now the default version as it is for publishing papers in the English version.
+  For the German version an adapted version provided by Tobias Chaloun is used.
+- added a flow chart example.
+- The help for PGFPlots is enhanced.
+- The README.md mentions now `surf3tikz`
+
+v1.6 (Jungle Rollers)
+- babel settings was indeed correct...
+
+v1.5 (Cortex Power)
+- babel settings for german and english were changed resulting in wrong hyphenation.
+- usefull siunitx settings for english version.
+- removed overfull boxes warning in `inhalt/hilfe.tex` and improved subcaption example.
+- corrected README for adding space in a subcaption image.
+
+v1.4 (Stormy Ascent)
+- Bug fix: the babel package (and therefore the header) needs to be loaded before the definitions of
+  the variables (name, title, ...) to enable special character support.
+
+v1.3 (Sanity Beach)
+- Added variables for the title, the thesis type, the names of the supervisor(s), and the examiners.
+- The date on the title is set automatically (uses package datetime).
+- new version of `myunits.sty`.
+- Added enhanced `example_plot.tikz` with a 4D scatter plot (x, y, marker colour, and marker size).
+- Added current `siunitx` settings in `export.tex`.
+- Added `fillbetween` library for pgfplots.
+- Convenient axis labels in `chirp_sequence_shift_01.tikz`.
+- Added viridis colomap choice in `surf2TikZ` (second commit).
+
+v1.2
+- According to the University Style Guide, the English names for theses are: Bachelor's Thesis and
+  Master's Thesis.
+- The setting for using the comma as a decimal separator is now only activated for the German
+  version in `rs_tikz`.
+- Added a Smith Chart example.
+- Comments are now convenient with the functionality, added export as a .fig for surf2D, save the
+  chosen settings in the header of created files. Added more view options in `surf2TikZ`.
+- Added axis options in PGFPlots help.
+- The export.tex includes all examples.
+- The x axis of the 3D surf plot example starts from 0.
+
+v1.1
+  - corrected University name in the English title page
+  - added circuitikz example in inhalt/hilfe.tex
+  - fixed spelling (inhalt/hilfe.tex)
+
+v1.0 New Institute Template

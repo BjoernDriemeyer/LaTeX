@@ -1,0 +1,133 @@
+\RequirePackage{textcomp}        % \text
+\RequirePackage{amstext}        % \text
+\RequirePackage{upgreek}        % upright greek symbols
+\RequirePackage{xspace}         % !PN, 1995/05/24
+                                % put after amstex because 
+                                % xspace should be loaded as late as possible
+
+%\PackageWarningNoLine{myunits}{%        % !PN, 1995/05/24
+%        This package loads xspace.sty,\MessageBreak
+%        therefore the same restrictions apply!\MessageBreak
+%        xspace.sty says:\MessageBreak
+%        \space\space\space
+%                Note that this package must be\MessageBreak
+%        \space\space\space
+%                loaded after any language (or other) packages\MessageBreak
+%        \space\space\space
+%                that make punctuation characters `active'%.\MessageBreak
+%}
+
+% !PN 1995/05/24
+% move \xspace at end of complete macro, otherwise \xspace doesn't work!
+% doesn't seem to bother math mode....
+\newcommand{\myunits@cmd}[1]{%
+   \ifmmode\mathop{\textrm{#1}}\else\mbox{\,#1}\fi\xspace%
+}
+
+% \newcommand{\mymu}{$\upmu$}
+\newcommand{\mymu}{\textmu}
+\newcommand{\myomega}{$\Upomega$}
+
+\newcommand{\fs}{\myunits@cmd{fs}}
+\newcommand{\ns}{\myunits@cmd{ns}}
+\newcommand{\Ps}{\myunits@cmd{ps}}    % note: \ps collides with letter
+\newcommand{\us}{\myunits@cmd{\mymu s}}
+\newcommand{\ms}{\myunits@cmd{ms}}
+\newcommand{\s}{\myunits@cmd{s}}
+
+\newcommand{\mHz}{\myunits@cmd{mHz}}
+\newcommand{\Hz}{\myunits@cmd{Hz}}
+\newcommand{\kHz}{\myunits@cmd{kHz}}
+\newcommand{\MHz}{\myunits@cmd{MHz}}
+\newcommand{\GHz}{\myunits@cmd{GHz}}
+\newcommand{\THz}{\myunits@cmd{THz}}
+
+\newcommand{\K}{\myunits@cmd{K}}
+
+\newcommand{\kmh}{\myunits@cmd{km/h}}
+
+\newcommand{\kbit}{\myunits@cmd{kbit}}
+\newcommand{\Mbit}{\myunits@cmd{Mbit}}
+
+\newcommand{\kbits}{\myunits@cmd{kbit/s}}
+\newcommand{\Mbits}{\myunits@cmd{Mbit/s}}
+
+\newcommand{\fW}{\myunits@cmd{fW}}
+\newcommand{\pW}{\myunits@cmd{pW}}
+\newcommand{\nW}{\myunits@cmd{nW}}
+\newcommand{\uW}{\myunits@cmd{\mymu W}}
+\newcommand{\mW}{\myunits@cmd{mW}}
+\newcommand{\W}{\myunits@cmd{W}}
+\newcommand{\kW}{\myunits@cmd{kW}}
+\newcommand{\MW}{\myunits@cmd{MW}}
+\newcommand{\GW}{\myunits@cmd{GW}}
+
+\newcommand{\dB}{\myunits@cmd{dB}}
+\newcommand{\dBm}{\myunits@cmd{dBm}}
+\newcommand{\dBW}{\myunits@cmd{dBW}}
+\newcommand{\dBc}{\myunits@cmd{dBc}}
+\newcommand{\dBi}{\myunits@cmd{dBi}}
+\newcommand{\dBu}{\myunits@cmd{dB\mymu}}
+\newcommand{\dBK}{\myunits@cmd{dB/K}}
+\newcommand{\dBcHz}{\myunits@cmd{dBc/Hz}}
+
+\newcommand{\nm}{\myunits@cmd{nm}}
+\newcommand{\um}{\myunits@cmd{\mymu m}}
+\newcommand{\mm}{\myunits@cmd{mm}}
+\newcommand{\cm}{\myunits@cmd{cm}}
+\newcommand{\m}{\myunits@cmd{m}}
+\newcommand{\km}{\myunits@cmd{km}}
+\newcommand{\inch}{\myunits@cmd{inch}}
+\newcommand{\mil}{\myunits@cmd{mil}}
+
+\newcommand{\nV}{\myunits@cmd{nV}}
+\newcommand{\uV}{\myunits@cmd{\mymu V}}
+\newcommand{\mV}{\myunits@cmd{mV}}
+\newcommand{\V}{\myunits@cmd{V}}
+\newcommand{\kV}{\myunits@cmd{kV}}
+
+\newcommand{\nA}{\myunits@cmd{nA}}
+\newcommand{\uA}{\myunits@cmd{\mymu A}}
+\newcommand{\mA}{\myunits@cmd{mA}}
+\newcommand{\A}{\myunits@cmd{A}}
+\newcommand{\kA}{\myunits@cmd{kA}}
+
+\newcommand{\fF}{\myunits@cmd{fF}}
+\newcommand{\pF}{\myunits@cmd{pF}}
+\newcommand{\nF}{\myunits@cmd{nF}}
+\newcommand{\uF}{\myunits@cmd{\mymu F}}
+\newcommand{\mF}{\myunits@cmd{mF}}
+\newcommand{\F}{\myunits@cmd{F}}
+
+\newcommand{\pH}{\myunits@cmd{pH}}
+\newcommand{\nH}{\myunits@cmd{nH}}
+\newcommand{\uH}{\myunits@cmd{\mymu H}}
+\newcommand{\mH}{\myunits@cmd{mH}}
+
+\newcommand{\Sie}{\myunits@cmd{S}}
+\newcommand{\mSie}{\myunits@cmd{mS}}
+\newcommand{\Siem}{\myunits@cmd{S/m}}
+
+\newcommand{\VA}{\myunits@cmd{VA}}
+\newcommand{\VAs}{\myunits@cmd{VAs}}
+
+\newcommand{\Ohm}{\myunits@cmd{\myomega}}
+\newcommand{\kOhm}{\myunits@cmd{k\myomega}}
+\newcommand{\MOhm}{\myunits@cmd{M\myomega}}
+
+\newcommand{\rad}{\myunits@cmd{rad}}
+\newcommand{\Deg}{%
+ \ifmmode%
+  ^\circ%
+ \else%
+  %\mbox{\,$^\circ$}%
+  \mbox{$^\circ$}\xspace%
+ \fi%
+}
+\newcommand{\DegC}{%
+ \ifmmode%
+  ^\circ\textrm{C}%
+ \else%
+  \mbox{$^\circ$C}\xspace%
+ \fi%
+}

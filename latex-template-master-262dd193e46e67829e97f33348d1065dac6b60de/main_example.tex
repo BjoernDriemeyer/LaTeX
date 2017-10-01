@@ -1,0 +1,116 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% +++---~~~~ Begin: main document ~~~---+++ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Author:         Fabian Roos, fabian@froos.de
+%%% Datum:          01.02.2016
+%%% Document:       Example Thesis Document
+%%% Information:    Compile document with './compile_main_example.sh' or alternatively
+%%%                 -> 'pdflatex -shell-escape main_example.tex'
+%%%                 -> 'makeglossaries main_example'
+%%%                 -> 'bibtex main_example'
+%%%                 -> 'pdflatex -shell-escape main_example.tex'
+%%%                 -> 'pdflatex -shell-escape main_example.tex'
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%% +++---~~~ Load Header: Settings for the Document ~~~---+++ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\LANGUAGE}{1}                       % 1 = german, 0 = english
+\newcommand{\SHOWDATETIME}{1}                   % 1 = show or 0 = hide the date and time in footer
+\newcommand{\TYPE}{1}                           % 1 = master, 0 = bachelor
+\input{header}                                  % load the required packages and settings
+\newcommand{\MYNAME}{Fabian Roos}               % your name
+\newcommand{\SUPERVISOR}{Fabian Roos, M.Sc., Dipl.-Ing.\ Gandalf der Graue} % name of your supervisor
+\newcommand{\FIRSTEXAMINER}{Prof.~Dr.-Ing.~Christian Waldschmidt} % your first examiner
+\newcommand{\SECONDEXAMINER}{Prof.~Dr.-Ing.~Erik der Rote} % your second examiner
+\newcommand{\TITLE}{%                           % this is the title for the title page
+  My Final Thesis With a Very Long Title\\      % use linebreaks for optimal wrap
+  Resulting Even in a Second Line\\
+  Using Dynamic Space to Fill the Page
+}
+
+% uncomment and change the following lines for the PDF properties
+% \hypersetup{%                                   % define the pdf settings
+%   pdfauthor={Fabian Roos},
+%   pdftitle={Art der Arbeit},
+%   pdfsubject={Längerer Titel der Arbeit},
+%   pdfkeywords={keyword1, keyword2}
+% }
+
+% \loadglsentries{inhalt/symverz}               % load the glossaries file
+
+
+%%% +++---~~~ LaTeX: document beginning ~~~---+++ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\pagenumbering{Roman}                           % first page numbers in roman number format
+
+
+%%% +++---~~~ Titelseite, Sperrverker, Selbstständigkeitserklärung ~~~---+++ %%%%%%%%%%%%%%%%%%%%%%%
+\input{inhalt/title}                            % Titelseite laden
+\cleardoubleemptypage                           % neue rechte Seite, leere Seite mit Pagestyle empty
+
+% ...oder auch weitere Seiten einbinden
+\input{inhalt/declaration}
+\cleardoubleemptypage                           % neue rechte Seite, leere Seite mit Pagestyle empty
+
+
+%%% +++---~~~ Define Abstract ~~~---+++ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% If you do not know what an abstract is, you don't need it!
+% -> if used, activate the abstract in the header for correct formatting
+% \begin{abstract}
+%   Hier steht die Zusammenfassung des Berichts, realisiert über die \emph{abstract}-Umgebung. Als
+%   Überschrift steht dort \emph{Zusammenfassung}.
+% \end{abstract}
+% \cleardoubleemptypage                           % neue rechte Seite, leere Seite mit Pagestyle empty
+
+
+%%% +++---~~~ Inhaltsverzeichnis einfügen ~~~---+++ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents
+
+\cleardoubleemptypage                           % Damit Seite abgeschlossen ist und die
+                                                % Seitennummerierung wieder geändert werden kann
+
+
+%%% +++---~~~ Dokumentbeginn: Nach Titelseite und Verzeichnisse~~~---+++ %%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagenumbering{arabic}		                    % Ab dem eigentlichen Inhalt
+                                                % arabische Numerierung von 1 an
+
+% Inhalte einbinden
+\input{inhalt/hilfe}
+
+
+% Testinhalt laden, dafür muss Paket 'blindtext' in 'header.tex' geladen werden
+%\blinddocument % kleines Dokument
+%\Blinddocument % großes Dokument
+
+
+%% Anhang einleiten
+%\appendix
+
+
+%% Verzeichnisse
+%\chapter*{Symbole}
+%\addcontentsline{toc}{chapter}{Symbole}
+%\glsaddall[types={symblist}]
+%\glsaddall[types={konvlist}]
+%\printglossary[type=konvlist, style=long]
+%\printglossary[type=symblist,style=long]
+
+%\listoffigures
+%\listoftables
+
+\bibliography{literatur}
+% \printbibliography
+
+\ifcase \LANGUAGE
+    % \bibliographystyle{unsrt}                   % do not use 'unsrt' anymore, due to compatibility issues
+    \bibliographystyle{bibtex/IEEEtran}         % use the IEEE default
+    % \bibliographystyle{bibtex/IEEEtranSA}       % a IEEE style but with alphanumeric behaviour
+\else
+    \bibliographystyle{bibtex/myIEEEtran-de}    % use the IEEE default, german adaptions by Tobias Chaloun
+    % \bibliographystyle{alphadin}
+    % \bibliographystyle{unsrtdin}
+    % \bibliographystyle{gerunsrt}                % do not use 'gerunsrt' anymore, due to compatibility issues
+\fi
+
+\end{document}

@@ -1,0 +1,29 @@
+\begin{tikzpicture}
+  \begin{axis}[
+      grid,
+      minor tick num = 1,
+      zmin = -46.7717,
+      zmax = 0,
+      xtick = {0,15,...,45},
+      ytick = {-30,-15,...,30},
+      ztick = {-45,-30,...,0},
+      xlabel = {$R$ in \si{\metre}},
+      ylabel = {$v$ in \si{\metre\per\second}},
+      colorbar,
+      colorbar style = {%
+        % ytick = {-50,-40,...,0},
+        ylabel = {Amplitude in \si{\decibel}},
+      },
+      point meta min = -46.7717,
+      xmin=0,
+      point meta max = 0,
+    ]
+    \addplot3 graphics[
+      points={% important
+        (15.2,29.86,0) => (73,239-0)
+        (0.2,35.49,-30.1) => (1,239-140)
+        (1.8,-35.49,-39.25) => (205,239-239)
+        (50.8,-36.06,-31.12) => (389,239-148)
+    }]{gfx/surf3D.png};
+  \end{axis}
+\end{tikzpicture}

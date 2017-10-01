@@ -1,0 +1,5 @@
+\begin{tikzpicture}[scale = 1.3]
+	\draw (0,0)
+	node[mixer](){};
+	
+\end{tikzpicture}

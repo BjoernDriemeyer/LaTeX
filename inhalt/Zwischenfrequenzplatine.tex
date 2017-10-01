@@ -1,0 +1,34 @@
+\chapter{Zwischenfrequenzplatine}
+In diesem Kapitel wird die Signalkonditionierung beschrieben. Dabei wird die Signalkonditionierung auf einer seperaten Platine, die Zwischenfrequenzplatine, vorgenommen. Eingangssignal werden zwei Kanäle, I und Q, in jeweils differentieller Form sein. Diese werden direkt vom Radarchip auf das Board geführt. Ziel ist es, als Ausgangssignal ein für die ADC Wandlung konditioniertes Signal zu erhalten. Ebenfalls soll die Zwischenfrequenzplatine unabhängig vom verwendeten Radarchip sein. 
+\section{Anforderung und Verwendung}
+Ein wesentliches Kriterium ist die erwartete Bandbreite. Diese ist abhängig von Radarchip und den darin verwendeten Mischern. Für den primär verwendeten \SI{122}{G\hertz} Chip ist eine Zwischenfrequenzbandbreite von 0-\SI{20}{M\hertz} angegeben. Dabei ist die Ausgangsimpedanz ausgehend vom Radarchip \SI{500}{\ohm}. Weiterhin muss der Eingangspegel bestimmt werden. Minimal liegt bei nach (LINK BUDGET REFERENZ) bei \SI{-44}{dBm}.
+\section{Auswahl und Anordnung der Komponenten}
+In Bild \ref{fig:IFBoard_Block} ist das Blockdiagramm der Zwischenfrequenzplatine dargestellt. Der Eingang links im Bild ist das vom Radarchip ausgehende Signal. Der Ausgang rechts ist das an den ADC weitergegebene, signalkonditionierte Signal. Die ersten drei Systemkomponenten sind differentiell zu differentiell. Demnach besitzen sie jeweils pro Kanal zwei Eingänge und zwei Ausgänge. Die letzte Systemstufe hat einen differentiellen Eingang und einen einfachen Ausgang.\\
+Als erste Komponente wurde ein ADA4937-2 von Analog Devices gewählt. Dieser differentiell zu differentiell Verstärker wird mit \SI{5}{\volt} betrieben. Der ADA4837-2 hat eine hohe differentielle Eingangsimpedanz von \SI{6}{M\ohm} sowie eine auf den Gleichanteil bezogene Eingangsimpedanz von \SI{3}{M\ohm}. Dies sorgt für Stabilität bei den ausgehenden Radarchipsignalen. Zusätzlich ist die Gleichtaktunterdrückung \SI{-80}{dB} wodurch Rauschen auf dem Gleichtakt stets unterdrückt wird. Die \SI{-3}{dB} Bandbreite liegt bei \SI{1.9}{G\hertz} und ist somit mehr als ausreichend. Der Gain kann über ein Widerstandsnetzwerk von vier Widerständen eingestellt werden. \\
+\begin{figure}[tbp]
+  \centering
+  \input{gfx/IfBoard_Block.tikz}
+  \caption{Blockdiagramm Ziwschenfrequenzplatine}
+  \label{fig:IFBoard_Block}
+\end{figure} 
+Die zweite Komponente ist ein HMC960 von Analog Devices. Dieser in Kombination mit der dritten Komponente, einem HMC900, ist die eigentliche Signalkonditionierung bestehend aus einem Variablen-Gain-Verstärker (HMC960) sowie einem Variablen-Tiefpass (HMC900). Der HMC900 hat dabei noch eine optionale \SI{10}{dB} Gain Stufe.\\
+Die differentiell zu einfach Konvertierung wird von einem AD8034 vorgenommen. Dieser ist die vierte und letzte Systemkomponente.
+\section{Filterentwurf}
+Um Rauschen auf den Gleichanteil zu unterdrücken werden zwischen den einzelnen Systemkomponenten Filter eingefügt, die bei Bedarf bestückt werden können. Zusätzlich soll das eigentliche Signal nicht gedämpft werden. Die Bandbreite von \SI{20}{M\hertz} muss demnach eingehalten werden.
+\begin{figure}[tbp]
+  \centering
+  \input{gfx/CM_Filter_Block.tikz}
+  \caption{Blockdiagramm CM-Filter}
+  \label{fig:CM_Filter_Block}
+\end{figure} 
+\section{Schaltplan-Erstellung und PCB-Design}
+\begin{figure}[tbp]
+  \centering
+  \input{gfx/CM_Filter_Simulation.tikz}
+  \caption{Blockdiagramm CM-Filter}
+  \label{fig:CM_Filter_Block}
+\end{figure} 
+\section{Softwarekonzept}
+
+
+

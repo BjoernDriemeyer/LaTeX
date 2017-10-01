@@ -1,0 +1,139 @@
+\chapter{Basic Mathematics}
+My first \LaTeX\ example with footnote for abc\footnote{means bac}. And this are my first formulae:
+\begin{align}
+  \SI{10}{\ohm} - \SI{9}{\ohm} &= \SI{1}{\ohm}\\
+  % 10\Ohm -9\Ohm &= 1\Ohm % with myunits which must be activated in the header
+  a^2 + b^2 &= c^2\,,\nonumber\\
+  \leadsto c &= \sqrt{a^2+b^2}\label{eq:pythagoras}\,,\\
+  a &= \operatorname{e}^{-\mathrm{i}\omega t}\,,\\
+  a &= \frac{1}{2}\,,\\
+  a_{n+1} &= a_n^2+\sum_{i=0}^{n}b^{2i}\,,\\
+  \intertext{with text inbetween without changing the alignment of the equations}
+  a_{n'+1}' &= a_{n'}^2+\sum_{i=0}^{n'}b^{2i}\,,\\
+  \boldsymbol{b} &= \boldsymbol{a }+ \boldsymbol{c}\,,\\
+  a &= a\cdot\, i\,,\qquad i\in\mathbb{N}\,.\\
+  \int_a^b (x+x^2)\mathrm{d} x &= \int_a^b (x+x^2)\mathrm{d} x\\
+  \oint_a^b (x+x^2)\mathrm{d}x &= \int_a^b (x+x^2)\mathrm{d}x\\
+  \oiint_a^b (x+x^2)\mathrm{d}x &= \int_a^b (x+x^2)\mathrm{d}x\\
+  \iiint_a^b (x+x^2)\mathrm{d}x &= \int_a^b (x+x^2)\mathrm{d}x\\
+  \int\int\int_a^b (x+x^2)\mathrm{d}x &= \int_a^b (x+x^2)\mathrm{d}x\\
+  \stackrel{\leftrightarrow}{A} &= \stackrel{\leftrightarrow}{B}+\stackrel{\leftrightarrow}{C}\\
+  R_{\text{max}}& = \frac{T_{\mathrm{c}} \cdot c}{2 B} f_{\mathrm{max}}
+\end{align}
+
+$\pi$ is roughly\ldots
+
+It's obvious, that Pythogoras' equation~(\ref{eq:pythagoras}) on page~\pageref{eq:pythagoras} is
+wrong. The correct relation between the three lines in a rectangular triangle (without equation
+number) is:
+\begin{align*}
+  c &= \sqrt[2.1]{a^2+b^2}\,.
+\end{align*}
+
+\begin{table}[!b]
+  \centering
+  \begin{tabular}{lr}
+    Parameter                               & Value\\
+    \hline
+    carrier frequency $f_{\text{c}}$        & \SI{77}{\giga\hertz}\\
+    bandwidth $B$                           & \SI{500}{\mega\hertz}\\
+    chirp duration $T_{\text{c}}$           & \SI{20}{\micro\second}\\
+    chirp repetition time $T_{\text{r}}$    & \SI{25}{\micro\second}\\
+    sampling frequency $f_{\text{s}}$       & \SI{50}{\mega\hertz}\\
+    number of chirps $L$                    & 128\\
+    window function                         & Hann\\
+    zero padding                            & signal length doubled
+  \end{tabular}
+  \caption{Specifications of Radar Parameters.}
+  \label{tab:radar_para}
+\end{table}
+
+\clearpage % use a clearpage carefully and only if you know the sideeffects
+\label{ici}
+We are now on page number~\pageref{ici}.
+
+\chapter{TikZ and PGFPlots example}
+Example for the \emph{subcaption} package using a TikZ and PGFPlots image.
+
+\begin{figure}[tbp]
+  \centering
+  \subcaptionbox{This is a TikZ image which can be scaled only with a fixed axis ratio.
+  \label{fig:tikzimg}}
+  [0.47\linewidth]{\includegraphics[width=0.47\linewidth]{gfx/chirp_sequence_shift_01.tikz}}
+  \hfill
+  \subcaptionbox{This is a PGFPlots example. Take a look at the source code for further examples.
+    Using the tikzscale package the axis ratio can be adepted.
+  \label{fig:pgfplotsimg}}
+  [0.47\linewidth]{\includegraphics[width=0.47\linewidth,height=0.2\textheight]{gfx/example_plots.tikz}}
+  \caption{This is an example for the subcaption package.}
+  \label{fig:subcapex}
+\end{figure}
+
+If in image~\ref{fig:subcapex} a linewidth smaller than 0.49 is chosen, the images are positioned
+left and right. If the size is larger as now, they are positioned differently. A reference to
+Bild~\ref{fig:subcapex}~(\subref{fig:tikzimg}). Also note that the axis ratio for a PGFPlots image
+can be influenced.
+
+\begin{figure}[tbp]
+  \centering
+  \subcaptionbox{This is a TikZ image which can be scaled only with a fixed axis ratio.
+  \label{fig:tikzimg2}}
+  [0.60\linewidth]{\includegraphics[width=0.6\linewidth]{gfx/chirp_sequence_shift_01.tikz}}
+  \par\bigskip
+  \subcaptionbox{This is a PGFPlots example. Take a look at the source code for further examples.
+    Using the tikzscale package the axis ratio can be adepted.
+  \label{fig:pgfplotsimg2}}
+  [0.60\linewidth]{\includegraphics[width=0.6\linewidth,height=0.35\textheight]{gfx/example_plots.tikz}}
+  \caption{This is an example for the subcaption package.}
+  \label{fig:subcapex2}
+\end{figure}
+
+The examples in Bild~\ref{fig:subcapex} and~\ref{fig:subcapex2} use either a TikZ image or a
+PGFPlots image consisting of a function or data points. For large data matrices this approach is not
+useful. Here use the \emph{graphics} command of PGFPlots. See~\ref{fig:pgfplots} for an example.
+
+\begin{figure}[tbp]
+  \begin{minipage}[b][\textheight][b]{\linewidth}
+    \centering
+    \subcaptionbox{This is an image which was created using the \emph{imagesc} plot function from
+      Matlab in combination with matlab2tikz.
+    \label{fig:imagesc}}
+    [\linewidth]{\includegraphics[width=0.95\linewidth]{gfx/surfimgsc.tikz}}
+    \vfill
+    \subcaptionbox{For 3D plots there is no suitable way with matlab2tikz. Create the png on your own
+      and create an axis environment with PGFPlots.
+    \label{fig:surf2tikz3d}}
+    [\linewidth]{\includegraphics[width=0.65\linewidth]{gfx/surf2tikz3D.tikz}}
+    %
+    \caption{An example for 2D and 3D plots.}
+    \label{fig:pgfplots}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tbp]
+  \centering
+  \input{gfx/CW_Block.tikz}
+  \caption{A \emph{circuitikz} example.}
+  \label{fig:cwradar}
+\end{figure}
+
+\begin{figure}[tbp]
+  \centering
+  \includegraphics[width=\linewidth]{gfx/smith_chart.tikz}
+  \caption{A Smith Chart example.}
+  \label{fig:sc}
+\end{figure}
+
+\begin{figure}[tbp]
+  \centering
+  \includegraphics{gfx/fc_example.tikz}
+  \caption{A flow chart example.}
+  \label{fig:fc}
+\end{figure}
+
+If you use several TikZ oder PGFPlots consider to active the \emph{externalize} option. Then think about a
+shell-escape.
+
+\chapter{Include literature}
+As an example a literature is included. Only entries which are referenced as like~\cite{Roos2015}
+are printed.

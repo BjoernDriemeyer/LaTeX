@@ -1,0 +1,39 @@
+%%
+% Für Fragen wenden an
+% Fabian Roos, fabian.roos@uni-ulm.de / studium@froos.de
+%%
+\begin{tikzpicture}
+  % axis
+  \draw[->] (0,0) -- (10,0) node[below] {$t$};
+  \draw[->] (0,0) -- (0,2.0) node[left] {$f$};
+
+  % -> label f_0
+  \draw (0.1,0.5) -- (-0.1,0.5) node[left] {$f_{\text{0}}$};
+
+
+  %% first block
+  % draw chirps
+  \foreach \x in {0, 0.75, 1.5}
+  {%
+    \draw[blue] (\x,0) -- ({\x+0.5},1);
+  }
+  % draw the box
+  \draw[very thin, dashed, gray] (0,0) -- (0,1) -- (2.25,1) -- (2.25,0);
+  % label
+  \node[above] at ({2.25/2},1) {Block $k$};
+
+
+  %% first repetition
+  \begin{scope}[shift={(6.75,0)}]
+    %% first block
+    % draw chirps
+    \foreach \x in {0, 0.75, 1.5}
+    {%
+      \draw[blue] (\x,0) -- ({\x+0.5},1);
+    }
+    % draw the box
+    \draw[very thin, dashed, gray] (0,0) -- (0,1) -- (2.25,1) -- (2.25,0);
+    % label
+    \node[above] at ({2.25/2},1) {Block $k+1$};
+  \end{scope}
+\end{tikzpicture}

@@ -1,0 +1,78 @@
+\tikzset{
+	block/.style    	= 	{draw, fill=white, thick, rectangle, minimum height = 0.98cm, minimum width = 0.98cm, node distance=2.5cm, line width=1.5pt},
+	%
+	% Standard circular block
+	circleblock/.style	= 	{draw, fill=white, thick, circle, minimum width = 0.98cm,  line width=1.5pt, node distance=2.5cm},
+	%
+	% Label for circuitikz nodes, as they're reference is in the middle and not on the outer edge of the node....
+	circuitikzlabel/.style	=	{label={[label, label distance=0.5cm]#1}},
+	%
+	%
+	%
+	% VCO/Oscillator 
+	myVCO/.style			= 	{circleblock, path picture={%
+		\draw[line width=0.75pt] 	($(path picture bounding box.west)+(0.09cm,0)$) sin ($(path picture bounding box.center)-(0.2cm,-0.2cm)$) cos  (path picture bounding box.center) sin ($(path picture bounding box.center)-(-0.2cm,0.2cm)$) cos ($(path picture bounding box.east)-(0.09cm,0)$);
+		}
+	},
+	% Amplifier, as circuitikz does only provite amplifiers as 2-ports/bipoles
+	myAMP/.style		= 	{block, node distance=2.5cm, path picture={%
+		\draw[fill=white, line width=0.75pt] ($(path picture bounding box.center)+(0.7em,0)$) -- ($(path picture bounding box.center)-(0.7em,-0.7em)$) -- ($(path picture bounding box.center)-(0.7em,0.7em)$)  -- cycle;
+		}
+	},
+	% Block	
+	myBlock/.style    	= 	{draw, fill=white, thick, rectangle, minimum height = 0.98cm, minimum width = 0.98cm, node distance=2.5cm, line width=1.5pt},
+	myBigBlock/.style    	= 	{draw, fill=white, thick, rectangle, minimum height = 0.98cm, minimum width = 2.94cm, node distance=2.5cm, line width=1.5pt},	
+	% Same for ADC
+	myADC/.style 	=	{block, path picture={%
+		\draw[line width=0.75pt] 	(path picture bounding box.south west) -- (path picture bounding box.north east);
+		\node[] at ($(path picture bounding box.center)+(-.5em,.5em)$) () {D};
+		\node[] at ($(path picture bounding box.center)+(.5em,-.5em)$) () {A};
+		} 
+	},
+	% Same for filters
+	myLP/.style	=	{block, path picture={%
+		%Sine-Waves
+		\draw[line width=.75pt] 	($(path picture bounding box.west)+(0.3em,0)$) sin ($(path picture bounding box.center)-(0.50em,-0.3em)$) cos  (path picture bounding box.center) sin ($(path picture bounding box.center)-(-0.50em,0.3em)$) cos ($(path picture bounding box.east)-(0.3em,0)$);
+		\draw[line width=0.75pt] 	($(path picture bounding box.west)+(0.3em,-0.65em)$) sin ($(path picture bounding box.center)-(0.50em,0.35em)$) cos  ( $(path picture bounding box.center)-(0,0.65em)$) sin ($(path picture bounding box.center)-(-0.50em,0.95em)$) cos ($(path picture bounding box.east)-(0.3em,0.65em)$);
+		\draw[line width=0.75pt] 	($(path picture bounding box.west)+(0.3em,0.65em)$) sin ($(path picture bounding box.center)-(0.50em,-0.95em)$) cos  ( $(path picture bounding box.center)+(0,0.65em)$) sin ($(path picture bounding box.center)-(-0.50em,-0.35em)$) cos ($(path picture bounding box.east)-(0.3em,-0.65em)$);
+		% Cancelation
+		\draw[line width=0.75pt] 	($(path picture bounding box.center)-(0.2em,0.2em)$) -- (path picture bounding box.center) -- ($(path picture bounding box.center)+(0.2em,0.2em)$) ;
+		\draw[line width=0.75pt] 	($(path picture bounding box.center)-(0.2em,-0.45em)$) -- ($(path picture bounding box.center)+(0,0.65em)$) -- ($(path picture bounding box.center)+(0.2em,0.85em)$) ;
+		}
+	},
+}
+\begin{tikzpicture}[line width=0.7pt,>=latex,node distance=1.5cm]
+	% First: All building blocks are placed relative to the first component
+	\draw (0,0)
+		node[myVCO, label={below:Oszillator}] (oszi) {}
+		node[myBlock, above of=oszi] (pa) {1/32}
+		node[myAMP, right of=oszi](firstAmp){}
+		node[right of = firstAmp](emptyNode){}
+		node[myAMP, right of = emptyNode](secAmp){}
+		node[myAMP, above of = secAmp](thirdAmp){}
+		node[myBlock,below right of = secAmp](90){90}	
+		node[mixer,below of = 90,node distance = 2cm](mixer2){}
+		node[mixer,below right of = mixer2,node distance = 2.5cm](mixer1){}
+		node[myAMP, right of=mixer1,rotate=180,label={above:LNA}](LNA){}
+		node[antenna,node distance = 5.5cm, right of = thirdAmp](antennaTx){}
+		node[antenna, right of = LNA](antennaRx){}
+		;
+	\draw[->](oszi.north)--(pa.south);
+	\draw[->](-1.5,0)--(oszi.west);
+	\draw[->](pa.west)--(-1.5,2.5);
+	\draw[-](oszi.east)--(firstAmp.west);
+	\draw[-](firstAmp.east)--(emptyNode.west);
+	\draw[-](4.5,0)|-(thirdAmp.west);
+	\draw[-](firstAmp.east)--(secAmp.west);
+	\draw[-](thirdAmp.east)--(antennaTx);
+	\draw[-](secAmp.east)-|(90.north);
+	\draw[-](90.south) |- (mixer2.north);
+	\draw[-](LNA.west) --(antennaRx);
+	\draw[-](LNA.east)--(mixer1.east);
+	\draw[-](LNA.south)|-(mixer2.east);
+	\draw[-](secAmp.east) -| (mixer1.north);
+	\draw[->](mixer1.west)--(-1.5,-5.5);
+	\draw[->](mixer2.west)--(-1.5,-3.7);
+	
+
+\end{tikzpicture}

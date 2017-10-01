@@ -1,0 +1,11 @@
+\begin{tikzpicture}[scale=2]
+        \draw
+        (0, 0) node[op amp,scale = 2] (opamp) {}
+		(opamp.+) node[left] {$U_{in,n}$}
+		(opamp.-) node[left] {$U_{in,p}$}
+		(opamp.out) node[right] {$U_{aus}$}
+		(opamp.up) --++(0,0.5) node[vcc]{$V_{S}$}
+		(opamp.down) --++(0,-0.5) node[vee]{$-V_{S}$
+}		     
+        ;
+\end{tikzpicture}

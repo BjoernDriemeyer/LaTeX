@@ -1,0 +1,116 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% +++---~~~~ Anfang: Vorlage für Grafikexport für Speicherung als Bild ~~~---+++ %%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Autor:		Fabian Roos, fabian@froos.de
+%%% Datum:		20.12.2013 (Nicht Einstellungsänderung, sondern Inhalt!)
+%%% Dokument:   Exportiere Grafiken als PDF, speichere als Bild (Vim: 'gg=G' erlaubt!)
+%%%	            PDF zu Bild umwandeln: 'convert -density 300 export.pdf export.png'
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%% +++---~~~ Anfang: documentclass-Definitionen ~~~---+++ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Siehe auch: Paketinformationen: http://www.ctan.org/tex-archive/macros/latex/contrib/standalone
+\documentclass[%
+% ~~~~~~~~~ Document ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    class=scrreprt,		% Welche Dokomentklasse soll als Vorlage verwendet werden? S.8
+                        % Vorteil: Verwende 'scrreprt' für Kompatibilität und Makros
+                        %          wie '\footnotesize'
+    tikz,				% Lädt das TikZ-Paket und setzt die Umgebungsvariablen. S. 7
+    border=1pt,         % Fügt einen Rand ein, damit Pfeile nicht abgeschnitten werden
+]{standalone}
+%%% +++---~~~ Ende: documentclass-Definitionen ~~~---+++  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\LANGUAGE}{1}                       % 1 = german, 0 = english
+
+%%% +++---~~~ Anfang: Pakete laden ~~~---+++ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ~~~~~~~~ Standard-Pakete ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Für die drei folgenden Pakete siehe auch: http://de.wikipedia.org/wiki/LaTeX#Zeichenkodierung
+\usepackage[utf8]{inputenc}	% Zeichencodierung
+
+\usepackage[T1]{fontenc}	% Schriftart, für Umlaute
+\usepackage[ngerman]{babel}	% Für deutsche Begriffe (Inhaltsver., Kapitel) und Worttrennung
+
+% ~~~~~~~~ Mathemathik-Pakete ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\usepackage{amsmath}		% Für Mathematikumgebungen wie equation, align (& vor =, S. 3)
+                % Formeln referenzieren mit \eqref, siehe S. 10
+                % beinhaltet laut Dokumentation S. 2:
+                % -> amstext: \text innerhalb von Gleichungen
+                % -> amsopn: Neue Formeln mit \DeclareMathOperator
+                % -> amsbsy: Rückwärtskompatibilität
+                % Bei Problemen \usepackage{mathtools}
+%\usepackage{amssymb}		% Für besondere Zeichen, etwa \dashrightarrow, lädt
+                % -> amsfont: Extra Fonts und Symbole
+                % http://de.wikibooks.org/wiki/LaTeX-Kompendium:_amssymb
+%\usepackage{esint}		% Spezielle Integrale
+\usepackage[%                       % SIunits ist veraltet, siehe LaTeX2e-Sündenregister S. 15
+                                    % Wie soll das Trennzeichen bei Zahlen aussehen?
+    % decimalsymbol=comma,	        % Dezimaltrenner (Version 1)
+    output-decimal-marker={,},      % Dezimaltrenner (Version 2)
+    % expproduct = {\cdot},         % Produktzeichen bei 1 \cdot 10^-5 ist Standard x (Version 1)
+    exponent-product={\cdot},       % Produktzeichen bei 1 \cdot 10^-5 ist Standard x (Version 2)
+    per-mode=fraction,              % Ohne diese Angabe folgt m s^-1 statt als Bruch
+    range-phrase={--},              % Für \SIrange{1}{10}{einheit} statt to ein -
+    % range-phrase={ bis },         % Für \SIrange{1}{10}{einheit} statt to ein bis
+    %range-units=single,            % Damit nicht nach jedem eine Einheit erscheint
+    list-final-separator={ und },   % Für \SIlist{1;2;3}{\einheit}: Letzte Trennung wie?
+    list-pair-separator={ und },    % Für \SIlist{1;2}{\einheit}: Trennung in der Mitte wie?
+    % list-units=brackets,          % Damit bei SIlist (1;2;3) Einheit erscheint statt 1Einheit, 2Einheit
+    detect-all,                     % Damit in strong-Umgebungen auch so dargstellt. Ggf. andere Option?
+]{siunitx}                          % Beispiel: \SI{1,1}{\metre} kein '{,}' nötig
+
+% ~~~~~~~~ Grafik-Pakete ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% TikZ (auch in 'export*' benötigt - standalone-Paket-Datei)
+\usepackage{tikz}		% Für Tikz-Grafiken
+\usetikzlibrary{%
+    external,		% Bibliothek für das externalisieren von TikZ
+    calc,			% Für die Berechnung von Parametern
+    shapes.geometric,	% Flussdiagramme
+    arrows,			% Pfeile (irgendwann auf arrows.meta wechseln, wenn nativ vorhanden)
+    fit,			% Flussdiagramme: Boxen um Nodes zeichnen
+    trees,			% for 'circular growth' bei den Baumdiagrammen
+    % snakes,       % superseded, 'decorations.pathmorphing' verwenden
+    decorations.pathmorphing,
+}
+\usepackage{tkz-euclide}	% Für die Einfache Kennzeichnung von Winkeln
+\usetkzobj{all}			% Option für 'tkz-euclide'
+
+% PGF (auch in 'export*' benötigt - standalone-Paket-Datei)
+\usepgflibrary{%
+    plotmarks,		% Scatterplots: Kreise statt Linien
+}
+
+% PGFPlots (auch in 'export*' benötigt - standalone-Paket-Datei)
+\usepackage{pgfplots}		% Paket zum Plotten laden
+\usepgfplotslibrary{%
+    external, 		% Bibliothek für das externalisieren von PGFPlots
+    statistics,		% Box Plots
+    groupplots,		% Groupplots
+    smithchart,     % Smith Charts
+    polar,          % polar plots
+    fillbetween,    % fill area with colour
+}
+
+\usepackage{circuitikz}
+
+\input{gfx/rs_tikz} % Load default set of graphic settings
+\pgfplotsset{compat=newest}	% Do not use compatibility mode, u.a. für matlab2tikz
+%\pgfplotsset{plot coordinates/math parser=false} % Für matlab2TikZ
+
+% Kein externalize: https://tex.stackexchange.com/questions/23587/
+
+%%% +++---~~~ Anfang: Dokument ~~~---+++ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}		% Keine Leeren Zeilen nach '\begin{document}', S. 7
+\input{gfx/chirp_sequence_shift_01.tikz}
+\input{gfx/example_plots.tikz}
+\input{gfx/surfimgsc.tikz}
+\input{gfx/surf2tikz3D.tikz}
+\input{gfx/CW_Block.tikz}
+\input{gfx/smith_chart.tikz}
+\input{gfx/fc_example.tikz}
+\end{document}
+%%% +++---~~~ Ende: Dokument ~~~---+++ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% +++---~~~~ Ende: Vorlage für Grafikexport für Speicherung als Bild ~~~---+++ %%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

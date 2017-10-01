@@ -1,0 +1,25 @@
+\begin{tikzpicture}
+  \begin{axis}[
+      axis on top,
+      enlargelimits = false,
+      colorbar,
+      colorbar style = {%
+        ylabel = {Amplitude in \si{\decibel}},
+        % ytick = {-50,-40,...,0},
+      },
+      point meta min = -51.1991,
+      point meta max = 0,
+      % xtick = {0,20,...,100},
+      % ytick = {0,20,...,60},
+      xlabel = {$R$ in \si{\metre}},
+      ylabel = {$v$ in \si{\metre\per\second}},
+      % xmin = 10,
+      % xmax = 20,
+      % ymin = -30,
+      % ymax = 30,
+    ]
+    \addplot graphics
+    [xmin = 0, xmax = 51, ymin = -36.055, ymax = 35.4916]
+    {gfx/imagesc-1.png};
+  \end{axis}
+\end{tikzpicture}

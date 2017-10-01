@@ -1,0 +1,47 @@
+
+\newcommand{\DECC}{%
+Ulm, {\ifcase \LANGUAGE 0 \selectlanguage{english}\else\selectlanguage{ngerman}den \fi\today}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\DECLARATION}{%
+\chapter*{\DECA}
+\vspace{2\baselineskip}
+
+\DECB
+\vspace{5\baselineskip}
+
+\DECC\hfill\MYNAME
+}
+
+\ifcase \LANGUAGE 0
+\newcommand{\DECA}{Declaration}
+\newcommand{\DECB}{%
+I declare that I performed the presented research thesis
+%
+\begin{center}
+\textbf{\large \TITLE}
+\end{center}
+%
+myself and
+that I wrote the thesis myself. Any additional sources of information have been
+duly identified and referenced. Further, I have regarded the rules of 
+scientific work of the Ulm University.
+}
+\else  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\DECA}{Erkl\"{a}rung}
+\newcommand{\DECB}{%
+Hiermit erkl\"{a}re ich, die vorliegende Arbeit
+%
+\begin{center}
+\textbf{\large \TITLE}
+\end{center}
+%
+selbstst\"{a}ndig verfasst, keine anderen als die angegebenen Quellen
+und Hilfsmittel benutzt und die Grunds\"{a}tze und Empfehlungen
+\glqq Verantwortung in der Wissenschaft\grqq{} der Universit\"{a}t Ulm
+beachtet zu haben.
+}
+\fi
+\DECLARATION
+\thispagestyle{empty}

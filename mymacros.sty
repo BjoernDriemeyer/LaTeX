@@ -1,0 +1,35 @@
+\newcommand{\EFF}{%
+\ifmmode\textrm{{eff}}\else\mbox{eff}\fi\xspace%
+}
+\newcommand{\IST}{%
+\ifmmode\textrm{{ist}}\else\mbox{ist}\fi\xspace%
+}
+\newcommand{\SOLL}{%
+\ifmmode\textrm{{soll}}\else\mbox{soll}\fi\xspace%
+}
+\newcommand{\myeps}{\varepsilon}
+% \newcommand{\Laplace}{\myunits@cmd{$\mathn{\Delta}$}}
+\newcommand{\diffd}{\text{d}}
+\newcommand{\myexp}{\text{e}}
+\newcommand{\myjot}{\text{j}}
+\newcommand{\SNR}{%
+   \ensuremath{(\raisebox{.5ex}{$S$}\!/\!\raisebox{-.5ex}{$N$})}\xspace%
+}
+\def\cosh{\mathop{\rm cosh}\nolimits}
+\def\acos{\mathop{\rm acos}\nolimits}
+\def\acosh{\mathop{\rm acosh}\nolimits}
+\def\rect{\mathop{\rm rect}\nolimits}
+
+
+\DeclareMathAlphabet{\mathbxit}{OT1}{cmr}{bx}{it}%  Vektoren: fett, italic
+\DeclareMathAlphabet{\mathbxn}{OT1}{cmr}{bx}{n}%    Matrizen: fett, upright
+\DeclareMathAlphabet{\mathn}{OT1}{cmr}{m}{n}%       Einheiten: normal, upright
+\newcommand{\mytens}[1]{%        buchstaben: bold, normal
+  \mathbxn{#1}
+} 
+\newcommand{\myvec}[1]{%       buchstaben: bold, italic
+\mathbxit{#1}%
+%  \vv{#1}%
+}
+
+\endinput

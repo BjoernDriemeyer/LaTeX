@@ -1,0 +1,127 @@
+\tikzset{%
+	% Self defined bulding blocks. 
+	% Nevertheless circutikz has implemented filters, couplers and other components since version 0.4, they are mostly implemented as bipoles.
+	% The usage of bipoles: \draw (start) to[lowpass/amp/adc,....] (end).
+	% The problem is, that if one wants to use arrows, the arrows in bipoles can not be sat manual (fixed in circuitikz source) AND THEY ARE NOT CONSISTENT
+	% Also it's quite a mess, which component is a monopole, simple block, bipol, quad/triple etc
+	% Following are a few examples on how to define your own blocks. 
+	%
+	% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+	% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+	% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+	% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+	%
+	% Standard block definition, the width and height is adopted from the circutizk source code, so don't mind the strange values. Also the linewidth is set according to the circutrikz source code.
+	block/.style    	= 	{draw, fill=white, thick, rectangle, minimum height = 0.98cm, minimum width = 0.98cm, node distance=2.5cm, line width=1.5pt},
+	%
+	% Standard circular block
+	circleblock/.style	= 	{draw, fill=white, thick, circle, minimum width = 0.98cm,  line width=1.5pt, node distance=2.5cm},
+	%
+	% Label for circuitikz nodes, as they're reference is in the middle and not on the outer edge of the node....
+	circuitikzlabel/.style	=	{label={[label, label distance=0.5cm]#1}},
+	%
+	%
+	%
+	% VCO/Oscillator 
+	myVCO/.style			= 	{circleblock, path picture={%
+		\draw[line width=0.75pt] 	($(path picture bounding box.west)+(0.09cm,0)$) sin ($(path picture bounding box.center)-(0.2cm,-0.2cm)$) cos  (path picture bounding box.center) sin ($(path picture bounding box.center)-(-0.2cm,0.2cm)$) cos ($(path picture bounding box.east)-(0.09cm,0)$);
+		}
+	},
+	% Amplifier, as circuitikz does only provite amplifiers as 2-ports/bipoles
+	myAMP/.style		= 	{block, node distance=2.5cm, path picture={%
+		\draw[fill=white, line width=0.75pt] ($(path picture bounding box.center)+(0.7em,0)$) -- ($(path picture bounding box.center)-(0.7em,-0.7em)$) -- ($(path picture bounding box.center)-(0.7em,0.7em)$)  -- cycle;
+		}
+	},%%
+	% Block	
+	myBlock/.style    	= 	{draw, fill=white, thick, rectangle, minimum height = 0.98cm, minimum width = 0.98cm, node distance=2.5cm, line width=1.5pt},
+	myBigBlock/.style    	= 	{draw, fill=white, thick, rectangle, minimum height = 0.98cm, minimum width = 2.94cm, node distance=2.5cm, line width=1.5pt},	
+	% Same for ADC
+	myADC/.style 	=	{block, path picture={%
+		\draw[line width=0.75pt] 	(path picture bounding box.south west) -- (path picture bounding box.north east);
+		\node[] at ($(path picture bounding box.center)+(-.5em,.5em)$) () {D};
+		\node[] at ($(path picture bounding box.center)+(.5em,-.5em)$) () {A};
+		} 
+	},
+	% Same for filters
+	myLP/.style	=	{block, path picture={%
+		%Sine-Waves
+		\draw[line width=.75pt] 	($(path picture bounding box.west)+(0.3em,0)$) sin ($(path picture bounding box.center)-(0.50em,-0.3em)$) cos  (path picture bounding box.center) sin ($(path picture bounding box.center)-(-0.50em,0.3em)$) cos ($(path picture bounding box.east)-(0.3em,0)$);
+		\draw[line width=0.75pt] 	($(path picture bounding box.west)+(0.3em,-0.65em)$) sin ($(path picture bounding box.center)-(0.50em,0.35em)$) cos  ( $(path picture bounding box.center)-(0,0.65em)$) sin ($(path picture bounding box.center)-(-0.50em,0.95em)$) cos ($(path picture bounding box.east)-(0.3em,0.65em)$);
+		\draw[line width=0.75pt] 	($(path picture bounding box.west)+(0.3em,0.65em)$) sin ($(path picture bounding box.center)-(0.50em,-0.95em)$) cos  ( $(path picture bounding box.center)+(0,0.65em)$) sin ($(path picture bounding box.center)-(-0.50em,-0.35em)$) cos ($(path picture bounding box.east)-(0.3em,-0.65em)$);
+		% Cancelation
+		\draw[line width=0.75pt] 	($(path picture bounding box.center)-(0.2em,0.2em)$) -- (path picture bounding box.center) -- ($(path picture bounding box.center)+(0.2em,0.2em)$) ;
+		\draw[line width=0.75pt] 	($(path picture bounding box.center)-(0.2em,-0.45em)$) -- ($(path picture bounding box.center)+(0,0.65em)$) -- ($(path picture bounding box.center)+(0.2em,0.85em)$) ;
+		}
+	},
+}
+\begin{tikzpicture}[line width=0.7pt,>=latex,node distance=2.5cm,scale = 0.7]
+
+	%Box
+	\draw[dashed,blue,-] (-1,1.5) rectangle (13,15.5);
+	\draw(6,15.5)
+		node[label={above:Radarsystem}](){};
+	%ADC
+	\draw (-4,4.5)
+		node[myADC, label={below:Analog-Digital-Wandler}] (ReFF) {};
+	\draw[->](0,4.5) -- (ReFF.east); 
+	
+	%RefTakt
+	\draw (-4,6.5)
+		node[myVCO, label={above:Referenztakt}] (ReF) {};
+	\draw[<-](0,6.5) -- (ReF.east); 
+	
+	%Spannungsversorgung
+	\draw[->](-3,2.5) -- (0,2.5);
+	\draw (-4,3) 
+		node[label={below:$\text{V}_{\text{Supply}}$}](abc){};
+		
+	%Radar-Board
+	\draw[-] (6,8)--(12,8);
+	\draw[-](12,8)--(12,9);
+	\draw[-](12,9)--(6,9);
+	\draw[-](6,9)--(6,8);		
+	\draw(9,9)
+		node[label ={below:Radar-Platine}] (Ref133337) {};
+			
+			
+	%PLL-Board
+	\draw[-](0,7)--(0,6);
+	\draw[-](0,6)--(12,6);
+	\draw[-](12,6)--(12,7);
+	\draw[-](12,7)--(0,7);	
+	\draw(6,7)
+		node[label ={below:Phasenregelkreis-Platine}] (Ref13337) {};
+	
+	%IF-Board
+	\draw[-](0,5)--(0,4);
+	\draw[-](0,4)--(12,4);
+	\draw[-](12,4)--(12,5);
+	\draw[-](12,5)--(0,5);
+	\draw(6,5)
+		node[label ={below:Zwischenfrequenz-Platine}] (Ref133337) {};
+	
+	%Power-Board
+	\draw[-](0,3)--(0,2);
+	\draw[-](0,2)--(12,2);
+	\draw[-](12,2)--(12,3);
+	\draw[-](12,3)--(0,3);
+	\draw(6,3)
+		node[label ={below:Power-Platine}] (Ref1337) {};
+
+	%Linse
+	\draw[-](0,12)--(6,12);
+	\draw[-](6,12)--(6,13);
+	\draw[-](0,13)--(0,12);
+	\draw[-](0,13)--(1,13);
+	\draw[-](6,13)--(5,13); 		
+	\draw(3,13)
+		node[label ={below:Dieelektrische Linse}] (Ref1333337) {};	
+	\draw (5,13) arc(0:180:2cm);
+	
+	%Antenna
+	\draw(3,8.5)
+		node[antenna](){};
+	\draw[dashed,-](3,8.5)--node[above]{Optional}(6,8.5);
+	
+
+\end{tikzpicture}

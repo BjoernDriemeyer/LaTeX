@@ -1,0 +1,43 @@
+% Example written by Fabian Roos, 08.2016
+% basic idea:
+% to ensure that all float charts use the same layout a common style is defined in my (Fabian Roos)
+% style definition file 'gfx/rs_tikz.tex' which is loaded. Because the width of the boxes is
+% dependant from the content no dimensions are set in the style file. These values need to be given
+% in your current document. This is done here in the header at the 'tikzset' position. The basic
+% style is inherited by the style file. Only the dimensions of the minimum width and height are
+% specified.
+% The minimum minimum width and height of elements are automatically calculated by TikZ to ensure
+% good looking nodes. The problem is, that with a changing text the nodes would have different
+% sizes. Therefore the minimum width and height are specified.
+% The same holds for the node distance. This is the distance which is used to place to nodes next to
+% each other using the 'right' / 'letf' / 'below' / 'above' of command. This distance is calculated
+% from the middle point to the middle point. Because the general node distance would also apply to
+% the vertical shift, this shift is specified again if a vertical placement is used.
+% The rest is normal node placement.
+
+\begin{tikzpicture}[node distance=4cm]
+  \tikzset{%
+    fcblock/.style={fcrecb, minimum width=2.5cm, minimum height=1.00cm},
+    fcdecision/.style={fcelr, minimum width=4cm, minimum height=1.00cm},
+  }
+
+  % shift in y direction to compensate node distance in vertical direction
+  \newcommand{\ys}{2.5}
+
+  % first row
+  \node[fcblock] (first) at (0,0) {first step};
+
+  % second row
+  \node[fcblock, yshift=\ys cm, below of=first] (second) {second step};
+  \node[fcdecision, right of=second] (decide) {what to do?};
+
+  % third row
+  \node[fcblock, yshift=\ys cm, below of=second] (third) {third step};
+  \node[fcblock, yshift=\ys cm, below of=decide] (quit) {quit!};
+
+  % connections
+  \draw[->] (first)         --  (second);
+  \draw[->] (second)        --  (decide);
+  \draw[->] (decide.south)  --  (third.north);
+  \draw[->] (decide)        --  (quit);
+\end{tikzpicture}

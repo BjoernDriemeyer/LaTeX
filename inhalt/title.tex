@@ -1,0 +1,58 @@
+\thispagestyle{empty}
+\def\unilogohead{%
+   \hspace*{-2.2mm}%
+   \parbox[b][35mm][t]{\textwidth}{%
+      \parbox[t][32mm][t]{\textwidth}{%
+      \includegraphics{logos/logo_brief_45_sw}%
+      }%
+   }%
+}%
+
+\begin{center}
+\sffamily
+\unilogohead
+\vspace{10mm}
+\Huge\textbf{\TITLE}
+\vspace{10mm}
+
+\Large\textbf{%
+  \ifcase\LANGUAGE0\ifcase\TYPE0 Bachelor's Thesis\else Master's Thesis\fi
+  \else\ifcase\TYPE0 Bachelorarbeit\else Masterarbeit\fi\fi
+}
+\vspace{20mm}
+
+\huge\textbf{%
+\MYNAME%
+}
+\vfill
+
+{%
+\normalsize
+\monthname~\the\year%
+}
+
+\vfill
+
+\normalsize\textbf{%
+\begin{tabular}{rl}
+ \ifcase\LANGUAGE0 Supervisor:\else Betreuer:\fi & \SUPERVISOR\\[1ex]
+1. \ifcase\LANGUAGE0 Examiner:\else Prüfer:\fi & \FIRSTEXAMINER\\[1ex]
+2. \ifcase\LANGUAGE0 Examiner:\else Prüfer:\fi & \SECONDEXAMINER%
+\end{tabular}
+}
+\vspace{15mm}
+
+{\small
+\ifcase\LANGUAGE0
+Institute of Microwave Engineering\\
+Ulm University
+\else
+Institut für Mikrowellentechnik\\
+Universität Ulm
+\fi
+}
+
+\end{center}
+
+
+\clearpage

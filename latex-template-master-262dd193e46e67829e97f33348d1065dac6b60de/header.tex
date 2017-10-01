@@ -1,0 +1,468 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% +++---~~~~ start: settings document template: header.tex~~~---+++ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Autor:      Fabian Roos, fabian@froos.de
+%%% Datum:      01.02.2016 (Nicht Einstellungsänderung, sondern Inhalt!)
+%%% Dokument:   Vorlage Masterarbeit (/ Praktikumsbericht) (Vim: kein 'gg=G'!)
+%%% Version:    0.1: Erster Entwurf, verwendet für Praktikumsbericht
+%%%             0.2: Umstellung auf Paket 'tikzscale'
+%%%	            0.3: Restrukturierung der Grafik-Pakete und -Optionen, final für Masterarbeit
+%%%             0.4: Einbindung der MWT-Optionen, geometry-Qualmöglichkeit, LaTeX_RS-Version
+%%%             0.5: Englische Version für babel, siunitx-Optionen
+%%%             0.6: Befehl für Referenzen auf Legenden in PGFPlots
+%%%             0.7: Unterstützung für Inkscape-Dateien
+%%%             0.8: Flag für Sprache, myunits
+%%%             0.9: prepared biber bibliography support
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%% +++---~~~ begin: documentclass definitions ~~~---+++ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% the documentation: http://mirrors.ctan.org/macros/latex/contrib/koma-script/doc/scrguide.pdf
+\documentclass[%
+% ~~~~~~~~~ Document ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    % final,    % final document, default option
+    % draft,    % show 'overfull hboxes' to see to large elements, no graphics are shown!
+% ~~~~~~~~~ font settings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    % fontsize=11pt,    % default value for scrbook, scrreprt, and scrartcl is 11pt, for PHD uses 9pt?
+    % headings=normal,  % font size for the headings, which are set large in the scrclass
+                        % default should be =big, but =small or =normal are possible as well
+% ~~~~~~~~~ Layout ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    paper=a4,	% Einstellung Papiergröße, Standard bei KOMA-Script, s. Handbuch S. 47
+    pagesize,	% Schreibt die Dateigröße ins PDF, sollte immer gesetzt sein, s. Handb. S.47
+    % landscape,% Landscape-Format
+    % oneside,	% Formatierung für einseitiger Druck, Standardoption
+    twoside,	% Formatierung für doppelseitiger Druck
+    % BCOR=0.78mm,  % Wie viel Platz geht pro Seite für die Bindung verloren? S. 32
+    % onecolumn	% Einspaltig, Standard
+    % twocolumn,% Zweispaltig
+    open=right,	% Wo soll neues Kapitel beginnen? Nur bei scrreprt sinnvoll! S. 89
+                % 'any':	Auf jeder neuen Seite
+                % 'right':	Auf jeder rechten Seite, fügt ggf. leere Seiten ein!
+                %           Ende einer Seite immer auf einer Ebene (\flushbottom wird gesetzt!), S. 29
+                %           Dies kann dazu führen, dass es mitunter große Absatzabstände gibt. Daher
+                %           ggf. ans Ende einer Seite ein \clearpage http://www.komascript.de/flushbottom
+                % 'left':	Auf jeder linken Seite, fügt ggf. leere Seiten ein!
+    % parskip=half,     % Absatzabstand /- einzug.
+                        % Standard: false, kein Abstand, sondern 1em-Einzug. S.77
+    % DIV=calc,   % only for a4 papers default values for the DIV value are defined, if other paper
+                % format is chosen, typearea claculates a good value.
+                % setting the calculation overwrites the default, use with caution
+% ~~~~~~~~ Titelseite ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    % titelpage=false,  % Titelkopf wird gesetzt, Standard bei scrarctl
+    % titelpage,        % Titelei in Form von Titelseite, Standard bei scrbook, scrreprt
+% ~~~~~~~~ Kopf-/Fuß-Zeile ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    % headinclude,      % Kopfzeile mit bei der Satzspiegelberechnung beachtet werden? Handb. S. 41
+    headsepline,        % Unter Kolumnentitel eine separate Linie setzen, siehe S. 70
+    %footsepline,       % Über dem Fuß eine separate Linie setzen, siehe S. 70
+% ~~~~~~~~ Verzeichnisse ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    % abstract=true,    % Bei der \begin{abstract}-Umgebung schreibt dies "Zusammenfassung" darüber
+    toc=bibliography,   % Literaturverzeichnis ins Inhaltsverzeichnis, S. 73
+    % toc=bibliographynumbered,	% Dieses Mal numeriert, S. 73
+    % toc=indent,       % Inhaltsverzeichnis hierarchisch, alternativ =graduated, Standard, S. 73
+    % toc=flat,         % auch =left, Inhatlsverzeichnis tabellarisch: Gliederungsnummern erste
+                        % Spalte, Überschriften zweite, Seitenzahlen dritte Spalte, siehe S. 73
+    % toc=index,        % Stichwortverzeichnis in den Index, auch =idx, siehe S. 73
+    toc=listof,         % Gleitumgebungen (Abbildungs-, Tabellenverzeichnis) ins Inhaltsverz. S. 72
+    % ?                 % weitere Optionen siehe S. 72 und S. 135
+    numbers=noenddot,   % Überschritfsnummern ohne Punkt am Ende, alt pointlessnumbers, S. 98
+% ~~~~~~~~ Mathematik ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    intlimits,          % place the limits above and below instead of right
+    % leqno,            % Formelnummer auf der linken Seite anzeigen, S. 120, amsmath: S. 3
+    % fleqn,            % Formeln linksbündig ausrichten, S. 120, amsmath: S. 3
+]{scrreprt}             % Komascript-Klassen: scrartcl, scrreprt, scrbook
+%%% +++---~~~ Ende: documentclass-Definitionen ~~~---+++  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%% +++---~~~ Kopfzeile aktivieren ~~~---+++ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{headings}	% 'plain' ist leere Kopf- und Fußzeile, nur Seitenzahl, Standard, S. 76
+                        % 'headings' gibt zusätzlich lebenden Kolumnentitel aus
+                        % Besondere Kopfzeilen für u.a. Titelseite, Indexseite: S. 79
+
+% MWT: Einkommentieren: Nur für Datum in Fußzeile? Dann für final auskommentieren?
+\usepackage{scrpage2}   % Nur für folgende Definitionen verwenden
+\usepackage{scrtime}    % Verschiedene Zeitformate
+\pagestyle{scrheadings}
+\clearscrheadfoot%      % delete all entries
+                        % define header and footer fields
+\automark[section]{chapter} % \automark[rechte Seite]{linke Seite} S. 225
+\ohead{\headmark}
+\ofoot[\pagemark]{\pagemark}
+\ifnum\SHOWDATETIME=1
+    \ifoot[\tiny\today, \thistime]{\tiny\today, \thistime}
+\fi
+
+
+%%% +++---~~~ Verzeichnis beeinflussen ~~~̣---+++ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                        % -1 \part | 0 \chapter | 1 \section | 2 \subsection (Standard)
+                        % 3 \subsubsection | 4 paragraph | 5 subparagraph
+% \setcounter{tocdepth}{3}      % Bis zu welcher Gliederungsebene im Inhaltsverzeichnis? Siehe S. 70
+% \setcounter{secnumdepth}{3}   % Bis zu welcher Gliederungsebene Nummer vor Titel anzeigen? S. 106
+                        % Wird ein Kapitel per '\chapter*{Name}' ohne Kapitelnummer erstellt, so
+                        % wird es auch nicht im Inhaltsverzeichnis angezeigt.
+                        % -> Setze vor die Kapiteldefinition folgende Zeile und das Kapitel taucht
+                        %    ToC auf
+                        % \addcontentsline{toc}{chapter}{Symbole}
+                        % https://tex.stackexchange.com/questions/14379
+
+% MWT: Einkommentieren
+% Definition sprachabhängiger Bezeichner, S. 297
+\ifcase \LANGUAGE
+    \renewcaptionname{english}{\figurename}{Fig.}
+    \renewcaptionname{english}{\tablename}{Tab.}
+\else
+    \renewcaptionname{ngerman}{\figurename}{Bild}
+    \renewcaptionname{ngerman}{\tablename}{Tab.}
+\fi
+
+% \numberwithin{equation}{section} % (Chapter.Section.Number) statt (Chapter.Number)
+
+
+%%% +++---~~~ Seitennummerierung beeinflussen ~~~̣---+++ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \pagenumbering{?}     % Setzt die Seitennummerierung auf '1' zurück, wählt Zählweise. Siehe S. 80
+                        % arabic (8) / roman (viii) / Roman (VIII) / alph (h) / Alph (H)
+                        % Im Dokument an die Stelle setzen, an der die neue Numerierung beginnen
+                        % soll
+                        % Ggf. muss die Seite erst beendet werden mit '\clearpage' bzw.
+                        % '\cleardoublepage'
+
+
+%%% +++---~~~ Anfang: Pakete laden ~~~---+++ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ~~~~~~~~ Standard-Pakete ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Für die drei folgenden Pakete siehe auch: http://de.wikipedia.org/wiki/LaTeX#Zeichenkodierung
+
+% <!-- Pakete für compilieren mit pdflatex
+\usepackage[utf8]{inputenc}	% Zeichencodierung
+\usepackage[T1]{fontenc}	% Schriftart, für Umlaute
+% -->
+
+% <!-- Pakete für compilieren mit lualatex
+% \usepackage{luainputenc}
+% -->
+
+\usepackage{lmodern}        % Hochwertige Fonts: http://tex.stackexchange.com/questions/147194/
+\ifcase \LANGUAGE           % load more than one language, active one last
+                            % http://tex.stackexchange.com/questions/20987/
+    \usepackage[ngerman,english]{babel} % english
+\else
+    \usepackage[english,ngerman]{babel}	% Für deutsche Begriffe (Inhaltsver., Kapitel) und Worttrennung
+                                        % Alte Rechtschreibung: german
+                                        % Neue Rechtschreibung: ngerman
+                                        % Quelle: http://tex.stackexchange.com/questions/67549/
+\fi
+% \usepackage[]{csquotes}
+
+% ~~~~~~~~ Grafik-Pakete ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% \usepackage{pdfpages}     % Für das Einbinden von PDF-Dateien als ganze Seite (nicht als Bild)
+                            % \includepdf[width=\linewidth]{x.pdf}
+\usepackage{graphicx}       % Grafiken: http://en.wikibooks.org/wiki/LaTeX/Importing_Graphics
+\usepackage[dvipsnames]{xcolor} % Lade ein definiertes Set an Farben
+\usepackage[%               % Beides MWT-Optionen
+    hang,
+    labelfont = bf,
+]{caption}                  % Wird für 'subcaption' benötigt in alten TexLive-Versionen
+\usepackage{subcaption}     % Statt veraltete Pakete 'subfigure' / 'subfig'. Siehe Sündenregister
+% \usepackage{wrapfig}      % Falls Grafiken von Text umflossen werden sollen, eine Möglichkeit!
+                            % Für Grafiken muss Paket graphicx geladen werden
+% \usepackage{morefloats}   % Mehr als 18 unbearbeitete floats: http://ctan.org/pkg/morefloats
+% \usepackage{flafter}      % MWT: Floats nach Referenz setzen
+% \usepackage{placeins}     % MWT: Alle unbearbeiteten Floats anzeigen.
+                            % Erlaubt mit \Floatbarrier das Ausgeben aller bisherigen Floats
+                            % Achtung: Kann zu teilweise leeren Seiten führen, nur mit Bedacht
+                            % verwenden. Besser wäre es mit [!t] oder [!b] zu arbeiten.
+\usepackage{adjustbox}      % Paket für die Skalierung von Flussdiagrammen
+% \newsavebox{\measurebox}  % verwendet für die Platzierung dreier Bilder nebeneinander
+
+% <!-- Folgende Pakete auch in export.tex
+% TikZ
+\usepackage{tikz}           % Für Tikz-Grafiken
+\usetikzlibrary{%
+    external,               % Bibliothek für das externalisieren von TikZ
+    calc,                   % Für die Berechnung von Parametern
+    shapes.geometric,       % Flussdiagramme
+    arrows,                 % Flussdiagramme
+    fit,                    % Flussdiagramme: Boxen um Nodes zeichnen
+    trees,                  % für 'circular growth' bei den Baumdiagrammen
+    % snakes,               % superseded, 'decorations.pathmorphing' verwenden
+    decorations.pathmorphing,
+}
+\usepackage{tkz-euclide}    % Für die Einfache Kennzeichnung von Winkeln
+\usetkzobj{all}             % Option für 'tkz-euclide'
+
+% PGF
+\usepgflibrary{%
+    plotmarks,              % Scatterplots: Kreise statt Linien
+}
+
+% PGFPlots (auch in 'export*' benötigt - standalone-Paket-Datei)
+\usepackage{pgfplots}       % Paket zum Plotten laden
+\usepgfplotslibrary{%
+    external,               % Bibliothek für das externalisieren von PGFPlots
+    statistics,             % Box Plots
+    groupplots,             % Groupplots
+    smithchart,             % Smith Charts
+    polar,                  % polar plots
+    fillbetween,            % fill area with colour
+}
+\pgfplotsset{compat=newest} % Verwende immer neueste Version und kein Kompatibilitätsmodus
+% \pgfplotsset{plot coordinates/math parser=false} % Für matlab2TikZ
+
+% Skalierung von TikZ / PGF
+\usepackage{tikzscale}      % Einbinden von TikZ/ PGFPlots zum skalieren per
+                            % \includegraphics[width=\linewidth,height=0.9\textheight]{gfx.tikz}
+                            % Höhe bei TikZ sinnlos, bei PGFPlots für Achsenverhältnis!
+                            % Grafik muss *.tikz sein, Fehler bei *.tex
+
+\usepackage[%
+    european,
+  ]{circuitikz}             % Für Schaltungen
+
+\input{gfx/rs_tikz}         % Definitionen für Flussdiagrame (Prefix 'fc'), Plotstyles, uvm.
+% Ende der Pakete für export.tex -->
+
+% after a \addplot in a PGFPlots figure a label \label{leg:snr} can be defined and referenced with
+% \protect\plotref{leg:snr}
+% source: http://tex.stackexchange.com/questions/65494/
+% problem: warnings of Multiple defined labels: tex.stackexchange.com/questions/277583/
+\newcommand{\plotref}[1]{\tikzexternaldisable\ref{#1}\tikzexternalenable}
+
+% Sollte 'draft' gesetzt werden, so zeige die Boxen in der korrekten Größe an
+% Quelle: http://tex.stackexchange.com/questions/47444/
+\pgfkeys{/pgf/images/include external/.code=\includegraphics{#1}}
+
+% Optimierung: Aktiviere 'externalize' (Setzen mit --shell-escape)
+% \tikzexternalize[%
+%     optimize command away=\includepdf, % Eingebundene PDFs nicht externalisieren
+%                             % https://tex.stackexchange.com/questions/135504/
+%     prefix=tikz/,           % Schreibe externalisierte PDF-Dateien in verzeichnis 'tikz'
+% ]
+
+% use lualatex for the externalization process, change inputenc or errors occur
+% -> comment in only if you know what you do!
+% \tikzset{external/system call={lualatex \tikzexternalcheckshellescape -halt-on-error -interaction=batchmode -jobname "\image" "\texsource"}}
+
+% <!-- Include Inkscape files: Start
+% \RequirePackage{scrlfile}                           % prevent the subfig package fromn being loaded
+% \PreventPackageFromLoading{subfig}                  % because of known incompatibility with subcaption
+%                                                     % use this until the svg package is updated
+%                                                     % https://tex.stackexchange.com/questions/291929/
+% % \expandafter\def\csname ver@subfig.sty\endcsname{}  % old, not working with Tex Live 2016
+%                                                     % http://tex.stackexchange.com/questions/213273/
+% \usepackage{svg}                                    % use this package to directly inser svg (!)
+%                                                     % files into the document. There is no need for
+%                                                     % the pdf_tex approach!
+%                                                     % have a look at the README for further
+%                                                     % information
+% \setsvg{inkscape = inkscape -z -D}                  % with this only the drawing instead of the full
+%                                                     % page is included
+% \setsvg{svgpath = gfx/}                             % specify the folder where the svg files are
+%                                                     % placed
+% Include Inkscape files: End -->
+
+\usepackage{xifthen}
+
+% ~~~~~~~~ Mathemathik-Pakete ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\usepackage{amsmath}        % Für Mathematikumgebungen wie equation, align (& vor =, S. 3)
+                            % Formeln referenzieren mit \eqref, siehe S. 10
+                            % beinhaltet laut Dokumentation S. 2:
+                            % -> amstext: \text innerhalb von Gleichungen
+                            % -> amsopn: Neue Formeln mit \DeclareMathOperator
+                            % -> amsbsy: Rückwärtskompatibilität
+                            % Bei Problemen \usepackage{mathtools}
+\usepackage{amssymb}		% Für besondere Zeichen, etwa \dashrightarrow, \mathbb{R}, lädt
+                            % -> amsfont: Extra Fonts und Symbole
+                            % http://de.wikibooks.org/wiki/LaTeX-Kompendium:_amssymb
+\usepackage{trfsigns}       % Für \fourier also o-o
+\usepackage{esint}          % special integrals, e.g. \oiin
+\ifcase \LANGUAGE
+    \usepackage[
+        exponent-product={\cdot},       % Produktzeichen bei 1 \cdot 10^-5 ist Standard x (Version 2)
+        per-mode=fraction,              % Ohne diese Angabe folgt m s^-1 statt als Bruch
+        detect-all,
+    ]{siunitx}
+\else
+    \usepackage[%                       % SIunits ist veraltet, siehe LaTeX2e-Sündenregister S. 15
+                                        % Wie soll das Trennzeichen bei Zahlen aussehen?
+        % decimalsymbol=comma,	        % Dezimaltrenner (Version 1)
+        output-decimal-marker={,},      % Dezimaltrenner (Version 2)
+        % expproduct = {\cdot},         % Produktzeichen bei 1 \cdot 10^-5 ist Standard x (Version 1)
+        exponent-product={\cdot},       % Produktzeichen bei 1 \cdot 10^-5 ist Standard x (Version 2)
+        per-mode=fraction,              % Ohne diese Angabe folgt m s^-1 statt als Bruch
+        range-phrase={--},              % Für \SIrange{1}{10}{einheit} statt to ein -
+        % range-phrase={ bis },         % Für \SIrange{1}{10}{einheit} statt to ein bis
+        %range-units=single,            % Damit nicht nach jedem eine Einheit erscheint
+        list-final-separator={ und },   % Für \SIlist{1;2;3}{\einheit}: Letzte Trennung wie?
+        list-pair-separator={ und },    % Für \SIlist{1;2}{\einheit}: Trennung in der Mitte wie?
+        % list-units=brackets,          % Damit bei SIlist (1;2;3) Einheit erscheint statt 1Einheit, 2Einheit
+        detect-all,                     % Damit in strong-Umgebungen auch so dargstellt. Ggf. andere Option?
+    ]{siunitx}                          % Beispiel: \SI{1,1}{\metre} kein '{,}' nötig
+\fi
+
+\setlength\delimitershortfall{-0.5pt}   % Damit Abstand zwischen mehreren Klammern bei Verwendung
+                                        % von \left und \right eingefügt wird. Frank Bögelsack
+
+\allowdisplaybreaks         % Damit in Gleichungen wie align Umbrüche erlaubt sind
+                            % http://tex.stackexchange.com/questions/102173/
+
+
+% ~~~~~~~~ Verschiedenes ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\usepackage{datetime}               % typeset the month name on title page, load after babel!
+% \usepackage{cite}                   % Für Mehrfachzitate wie [1-3], sonst nicht benötigt
+% \usepackage{csquotes}
+% \usepackage{todonotes}              % Bessere (?) Notes, als mit \marginline{...}
+% \makeatletter                       % Problem with externalize:
+% \renewcommand{\todo}[2][]{\tikzexternaldisable\@todo[#1]{#2}\tikzexternalenable}
+% \makeatother                        % http://tex.stackexchange.com/questions/42486/
+% \usepackage{blindtext}              % Für Blindtext zum testen, sonst deaktivieren!
+
+
+% ~~~~~~~~ MWT-Pakete ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\ifcase \LANGUAGE
+\else
+    \usepackage{bibgerm}            % Falls 'gerunsrt' verwendet werden soll
+\fi
+% \usepackage{pdflscape}            % Option macht auf Institutsrechner mit externalize Probleme
+
+\usepackage{listings}
+\lstset{%
+    language=Matlab,                % choose the language of the code
+    basicstyle=\scriptsize,         % the size of the fonts that are used for the code
+    numbers=none,                   % where to put the line-numbers
+    numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+    stepnumber=1,                   % the step between two line-numbers. If it's 1 each line will be numbered
+    numbersep=8pt,                  % how far the line-numbers are from the code
+    backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+    showspaces=false,               % show spaces adding particular underscores
+    showstringspaces=false,         % underline spaces within strings
+    showtabs=false,                 % show tabs within strings adding particular underscores
+    frame=false,                    % adds a frame around the code
+    tabsize=3,                      % sets default tabsize to 2 spaces
+    captionpos=b,                   % sets the caption-position to bottom
+    breaklines=true,                % sets automatic line breaking
+    breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+    commentstyle=\color{PineGreen}, % OliveGreen, PineGreen?
+    stringstyle=\color{Purple},
+    escapeinside={\%*}{*)}          % if you want to add a comment within your code
+}
+
+% \usepackage{myunits}                % if siunitx is not used, e.g. 42\Ohm
+% \usepackage{mymacros}               % abbrevations
+
+% % Writing floating point numbers in german and math mode (P. Schuh)
+% % without additional {}: e.g. $4,56$
+% \mathchardef\ocomma="013B
+% \mathchardef\pcomma="613B
+% \mathcode`,="8000
+% {\catcode`,=\active
+% \gdef,{\obeyspaces\futurelet\next\smartcomma}}
+% \def\smartcomma{\if\space\next\pcomma\else\ocomma\fi}
+
+%% --------------------------------------------------------------------------------------------------
+%% Better dealing with floats
+%% Alter some LaTeX defaults for better treatment of figures:
+%% See p.105 of "TeX Unbound" for suggested values.
+%% See pp. 199-200 of Lamport's "LaTeX" book for details.
+%%   General parameters, for ALL pages:
+%\renewcommand{\topfraction}{0.9}        % max fraction of floats at top
+%\renewcommand{\bottomfraction}{0.8}     % max fraction of floats at bottom
+%%   Parameters for TEXT pages (not float pages):
+%\setcounter{topnumber}{1}
+%\setcounter{bottomnumber}{1}
+%\setcounter{totalnumber}{4}     % 2 may work better
+%\setcounter{dbltopnumber}{2}    % for 2-column pages
+%\renewcommand{\dbltopfraction}{0.9}     % fit big float above 2-col. text
+%\renewcommand{\textfraction}{0.07}      % allow minimal text w. figs
+%%   Parameters for FLOAT pages (not text pages):
+%\renewcommand{\floatpagefraction}{0.7}  % require fuller float pages
+%% N.B.: floatpagefraction MUST be less than topfraction !!
+%\renewcommand{\dblfloatpagefraction}{0.7} % require fuller float pages
+%% remember using [htp] or [htpb] for placement
+%% --------------------------------------------------------------------------------------------------
+
+% ~~~~~~~~ Layout ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\usepackage{cmap}           % MWT
+\usepackage[activate]{pdfcprot}   % character protruding (MWT)
+\usepackage{setspace}       % Falls wirklich notwendig kann hiermit der Zeilenabstand geändert (MWT)
+                            % werden. Nicht anders lösen, siehe LaTeX2e-Sündenregister S. 6
+\setstretch{1.1}            % skip between lines (MWT)
+\usepackage[                % MWT
+    textwidth=160mm, textheight=230mm, top=31mm     % A4 Thesis
+    % textwidth=111mm, textheight=155mm, top=25mm   % A5 Thesis
+]{geometry}
+
+% \usepackage{enumitem}       % u.a. Einzugsänderung und List-Stile ändern
+% \usepackage[hyphens]{url}   % Formatieren vorn URLs per \url{http://...}
+                            % SEO-URLs haben viele "-" und werden wegen Doppeldeutigkeit nicht
+                            % getrennt. Um auch dort zu trennen, die Option [hyphens] übergeben
+                            % Achtung: Muss zwingend vor hyperref geladen werden!
+                            % http://www.froos.de/blog/latex-url-zu-lang-umbruch-erzwingen-bindestrich/
+% \usepackage{float}          % Nötig, um figures per ?H? an Position festzulegen, sonst nicht.
+                            % -> Wenn algorithm geladen, dann muss dieses Paket davor geladen
+                            %    werden, da algorithm dieses Paket lädt. hyperref braucht ein
+                            %    etwaiges float aber davor!
+                            % -> tex.stackexchange.com/questions/24586/
+\usepackage{hyperref}       % Links im Dokument setzen. Sollte sehr spät geladen werden!
+                            % http://en.wikibooks.org/wiki/LaTeX/Hyperlinks
+\hypersetup{%
+    % hidelinks,            % Keine hevorgehobenen farbigen Links, erst ab Version 6.82a (05.02.2011)
+}
+% \hypersetup{              % Vorlage für PDF-Eigenschaften, aufnehmen in main.tex
+% 	pdftitle={Praktikumsbericht},
+% 	pdfsubject={Segmentierung von Laserdaten},
+% 	pdfkeywords={Keyword1,Keyword2}
+% }
+
+% \usepackage[%
+%   style=alphabetic,%
+%   sorting=anyt,%
+%   sortcites=false,%
+%   sortlocale = de,%
+%   firstinits=false,%
+%   useprefix=false,%
+%   uniquename=init,hyperref=auto,%
+%   doi=false,isbn=false,url=false,%
+%   minnames=3,maxnames=5,%
+%   minitems=3,maxitems=99,%
+%   minalphanames=3,maxalphanames=3,%
+%   maxcitenames=99,%
+%   autopunct=false,%
+%   backend=biber%
+% ]{biblatex}
+% \renewcommand*{\labelalphaothers}{}
+% \renewcommand\labelnamepunct{\addcomma\space} % https://tex.stackexchange.com/questions/230150/
+% \bibliography{literatur}
+
+% ~~~~~~~~ Algorithmen / Pseudocode ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Übersicht über mögliche Pakete: http://en.wikibooks.org/wiki/LaTeX/Algorithms
+% Welches davon verwenden? tex.stackexchange.com/questions/1375/
+% Laut hyperref-Readme erst hyperref und dann algorithm laden
+% \usepackage[Pseudocode]{algorithm} % Für eine Algorithmus-Umgebung: Für \label und \caption
+% \usepackage{algorithmicx}     % Für die Umgebung des Pseudocodes, definiert Makros
+% \usepackage{algpseudocode}    % Formatierung des Pseudocodes, gehört zu algorithmicx
+                              % Jeder Pseudocode begint mit \begin{algorithmic}[lines]
+
+% ~~~~~~~~ glossaries and acronyms  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% \usepackage[
+%     % toc,                        % Im Inhaltsverzeichnis erwähnen
+%     % nonumberlist,               % do not show the pages where the entry is used
+%                                   % especially do not use if alle entries are printed without \gls{}
+%     % nopostdot,                  % no full stop at the end
+%     % nogroupskip,                % do not use a gap between the letter groups
+%     % xindy,                      % sort with xindy, available with TeX Live
+%     % nomain,                     % Falls nicht das Hauptverzeichnis mit 'glo'-Datei verwendet wird
+% ]{glossaries}                   % load AFTER hyperref (as mentioned in glossaries manual)
+% \setacronymstyle{long-short}
+% % \setglossarysection{section}% Festlegen, wie Glossar formatiert wird, Standard ist 'chapter'
+% % \newglossary[<log-ext>]{<name>}{<in-ext>}{<out-ext>}{<title>}[<counter>]
+% % Quelle: http://www.dickimaw-books.com/latex/thesis/html/makeglossaries.html#sec:newglossary
+% % \newglossary[slg]{symblist}{syi}{syg}{Symbolverzeichnis}
+% % \newglossary[klg]{konvlist}{kvi}{kvo}{Konventionen}
+% \makeglossaries             % Erstellung der externen Dateien für die Indexierung
+% % \loadglsentries{symbole}    % Vor '\begin{document}' Symbole laden, aufnehmen in main.tex
+
+
+%%% +++---~~~ Ende: Pakete laden ~~~---+++ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% +++---~~~~ Ende: Einstellungen Dokumentenvorlage: header.tex ~~~---+++ %%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

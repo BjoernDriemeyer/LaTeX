@@ -1,0 +1,74 @@
+\tikzset{%
+	% Self defined bulding blocks. 
+	% Nevertheless circutikz has implemented filters, couplers and other components since version 0.4, they are mostly implemented as bipoles.
+	% The usage of bipoles: \draw (start) to[lowpass/amp/adc,....] (end).
+	% The problem is, that if one wants to use arrows, the arrows in bipoles can not be sat manual (fixed in circuitikz source) AND THEY ARE NOT CONSISTENT
+	% Also it's quite a mess, which component is a monopole, simple block, bipol, quad/triple etc
+	% Following are a few examples on how to define your own blocks. 
+	%
+	% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+	% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+	% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+	% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+	%
+	% Standard block definition, the width and height is adopted from the circutizk source code, so don't mind the strange values. Also the linewidth is set according to the circutrikz source code.
+	block/.style    	= 	{draw, fill=white, thick, rectangle, minimum height = 0.98cm, minimum width = 0.98cm, node distance=2.5cm, line width=1.5pt},
+	%
+	% Standard circular block
+	circleblock/.style	= 	{draw, fill=white, thick, circle, minimum width = 0.98cm,  line width=1.5pt, node distance=2.5cm},
+	%
+	% Label for circuitikz nodes, as they're reference is in the middle and not on the outer edge of the node....
+	circuitikzlabel/.style	=	{label={[label, label distance=0.5cm]#1}},
+	%
+	%
+	%
+	% VCO/Oscillator 
+	myVCO/.style			= 	{circleblock, path picture={%
+		\draw[line width=0.75pt] 	($(path picture bounding box.west)+(0.09cm,0)$) sin ($(path picture bounding box.center)-(0.2cm,-0.2cm)$) cos  (path picture bounding box.center) sin ($(path picture bounding box.center)-(-0.2cm,0.2cm)$) cos ($(path picture bounding box.east)-(0.09cm,0)$);
+		}
+	},
+	% Amplifier, as circuitikz does only provite amplifiers as 2-ports/bipoles
+	myAMP/.style		= 	{block, node distance=2.5cm, path picture={%
+		\draw[fill=white, line width=0.75pt] ($(path picture bounding box.center)+(0.7em,0)$) -- ($(path picture bounding box.center)-(0.7em,-0.7em)$) -- ($(path picture bounding box.center)-(0.7em,0.7em)$)  -- cycle;
+		}
+	},%%
+	% Block	
+	myBlock/.style    	= 	{draw, fill=white, thick, rectangle, minimum height = 0.98cm, minimum width = 0.98cm, node distance=2.5cm, line width=1.5pt},
+	myBigBlock/.style    	= 	{draw, fill=white, thick, rectangle, minimum height = 0.98cm, minimum width = 2.94cm, node distance=2.5cm, line width=1.5pt},	
+	% Same for ADC
+	myADC/.style 	=	{block, path picture={%
+		\draw[line width=0.75pt] 	(path picture bounding box.south west) -- (path picture bounding box.north east);
+		\node[] at ($(path picture bounding box.center)+(-.5em,.5em)$) () {D};
+		\node[] at ($(path picture bounding box.center)+(.5em,-.5em)$) () {A};
+		} 
+	},
+	% Same for filters
+	myLP/.style	=	{block, path picture={%
+		%Sine-Waves
+		\draw[line width=.75pt] 	($(path picture bounding box.west)+(0.3em,0)$) sin ($(path picture bounding box.center)-(0.50em,-0.3em)$) cos  (path picture bounding box.center) sin ($(path picture bounding box.center)-(-0.50em,0.3em)$) cos ($(path picture bounding box.east)-(0.3em,0)$);
+		\draw[line width=0.75pt] 	($(path picture bounding box.west)+(0.3em,-0.65em)$) sin ($(path picture bounding box.center)-(0.50em,0.35em)$) cos  ( $(path picture bounding box.center)-(0,0.65em)$) sin ($(path picture bounding box.center)-(-0.50em,0.95em)$) cos ($(path picture bounding box.east)-(0.3em,0.65em)$);
+		\draw[line width=0.75pt] 	($(path picture bounding box.west)+(0.3em,0.65em)$) sin ($(path picture bounding box.center)-(0.50em,-0.95em)$) cos  ( $(path picture bounding box.center)+(0,0.65em)$) sin ($(path picture bounding box.center)-(-0.50em,-0.35em)$) cos ($(path picture bounding box.east)-(0.3em,-0.65em)$);
+		% Cancelation
+		\draw[line width=0.75pt] 	($(path picture bounding box.center)-(0.2em,0.2em)$) -- (path picture bounding box.center) -- ($(path picture bounding box.center)+(0.2em,0.2em)$) ;
+		\draw[line width=0.75pt] 	($(path picture bounding box.center)-(0.2em,-0.45em)$) -- ($(path picture bounding box.center)+(0,0.65em)$) -- ($(path picture bounding box.center)+(0.2em,0.85em)$) ;
+		}
+	},
+}
+\begin{tikzpicture}[line width=0.7pt,>=latex,node distance=2.5cm,scale = 0.8]
+	% First: All building blocks are placed relative to the first component
+	
+	\draw (0,0) to[R=$R_1$] (2,0);	
+	\draw (0,-2) to[R=$R_2$] (2,-2);	
+	\draw (3,2) to[C=$C_1$] (3,0);	
+	\draw (3,-2) to[C=$C_2$] (3,-4);	
+	\draw (4,0) to[C=$C_3$] (4,-2);
+
+	\draw[o-](-2,0)--(0,0);
+	\draw[o-](-2,-2)--(0,-2);
+	
+	\draw[-o] (2,0)--(6,0);
+	\draw[-o] (2,-2)--(6,-2);
+	
+	\draw(3,2)node[ground,rotate = 180](){};
+	\draw(3,-4)node[ground](){};
+\end{tikzpicture}

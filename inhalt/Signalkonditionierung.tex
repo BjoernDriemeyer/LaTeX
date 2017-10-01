@@ -1,0 +1,166 @@
+\chapter{Signalkonditionierung}
+Signalkonditionierung beschreibt die Bearbeitung eines analogen Signals vor der Weiterverarbeitung in der nächsten, oft letzten, Systemstufe. Ziel der in dieser Arbeit durchgeführten Signalkonditionierung ist die Aufbereitung der vom Radarchip empfangenen Zwischenfrequenzsignale für die Weiterleitung in einen Analog-Digital-Konverter. Dafür sollen benötigte Systemkomponenten vorgestellt und mit den wichtigsten Systemparametern beschrieben werden. 
+\section{Rauschen}
+Rauschen beschreibt eine stochastische Störgröße die sich in der Änderung von Signalen zeigt. Dabei begrenzt Rauschen die Möglichkeit von Systemen, Signale eindeutig zu detektieren und muss demnach stets mit betrachtet werden wenn ein System oder ein Kommunikationsweg ausgelegt wird. Dabei ist insbesondere das Verhältnis von Signalleistung zu Rauschleistung, das SNR, entscheidend. Dies ist über
+\begin{align}
+\text{SNR} = \frac{S}{N} = \frac{P_{Signal}}{P_{Rauschen}}
+\end{align}
+definiert. Dabei wird das SNR meist in dB angegeben. Ursachen von Rauschen sind unterschiedlich. Folgend sind einige wichtige Rauschprozesse aufgezählt.
+\begin{description}
+\item Thermisches Rauschen\\
+Thermisches Rauschen wird durch die Behinderung freier Ladungsträger durch Gitterschwingungen in festen Leitern verursacht. Dabei verändert sich die Geschwindigkeit der Ladungsträger und erzeugt somit das Thermische Rauschen. Auf thermisches Rauschen wird weiterhin noch genauer eingegangen.
+\item Schrotrauschen \\
+Schrotrauschen wird durch diskrete Ladungsträger verursacht. Dabei ist bei konstantem Strom die Anzahl der Ladungsträger nicht konstant. Dies wird durch verschiedene energetische Barrieren oder Rekombinationsprozesse in Halbleiterübergängen verursacht. Da jeder Ladungsträger, im Fall von elektrischen Strom Elektronen, zum Rauschen beiträgt, lässt sich das gemittelte Quadrat des Rauschstroms $\bar{i}_{n}^2$ über
+\begin{align}
+\bar{i}_{n}^2 = 2eI\Delta f
+\end{align}
+mit I dem Leiterstrom, e der Elementarladung und $\Delta f $ der Messbandbreite, angeben\cite{Rauscherino}. Es ist auffällig, dass Schrotrauschen nicht direkt von der Frequenz, sondern von dem Frequenzband abhängt.
+\item 1/f Rauschen \\
+1/f Rauschen entsteht aus den Eigenschaften von Grenzflächenzuständen\cite{HFKompo}.  Dabei nimmt die Rauschleistung mit 1/f ab. Ab etwa \SI{10}{k\hertz} ist dieser Rauschtyp vernachlässigbar klein.
+\end{description}
+
+\subsection{Thermisches Rauschen}
+Es wurde bereits der Hintergrund von thermischen Rauschen genannt. Dabei kann bis zu hohen Frequenzen angenommen werden, dass thermisches Rauschen frequenzunabhängig ist. So ist die thermische Rauschleistung eines Widerstands $P_{n}$ mit
+\begin{align}
+P_{n} = \frac{\bar{u}_{n}^2}{4R} = kT\Delta f
+\end{align}
+gegeben. Stellt man nach $\bar{u}_{n}^2$ um, ergibt sich für den Mittelwert der Rausch-Spannung
+\begin{align}
+\bar{u}_{n}^2 = 4kTR\Delta f.
+\end{align}
+Analog lässt sich somit die Leistungsdichte der Rauschspannung nach \cite{Rauscherino} zu
+\begin{align}
+S_{n} = \frac{\bar{u}_{n}^2}{\Delta f} = 4kTR
+\end{align}
+bestimmen. Dabei ist $S_{n}$ über die Frequenz konstant. \\
+Eine Möglichkeit um einen rauschenden Widerstand zu beschreiben ist, ihn in einen idealen, nicht rauschenden Widerstand sowie eine rauschende Quelle aufzuteilen. Dabei kann entweder eine Rausch-Stromquelle oder eine Rausch-Spannungsquelle gewählt werden. Für eine Rausch-Stromquelle wird der Kurzschlussstorm
+\begin{align}
+\bar{i}_{n,KS}^2 = \frac{4kT\Delta f}{R}
+\end{align}
+und für eine Rausch-Spannungsquelle die Leerlaufspannung
+\begin{align}
+\bar{u}_{n,LL}^2 = 4kTR\Delta f 
+\end{align}
+bestimmt\cite{HFKompo}.
+\subsection{Phasenrauschen}
+Phasenrauschen tritt stets dann auf, wenn ein periodisches (Zeit-)Signal erzeugt werden soll. Phasenrauschen bezeichnet die dabei auftretenden Effekte im Frequenzbereich und Jitter entsprechend die Korrelation im Zeitbereich. Ein periodisches Zeitsignal korreliert mit einem diskreten Spektrum, einem Dirac-Impuls(Bild \ref{Oszi} links). In der Realität sind diskrete Signale unmöglich zu erreichen. Ein realer Dirac-Impuls ist dabei in Bild \ref{Oszi} rechts dargestellt. Die benachbarten Frequenzanteile neben $f_{0}$ werden als Phasenrauschen bezeichnet. Um Phasenrauschen zu senken, werden Phasenregelschleifen verwendet.\\
+\begin{figure}[tbp]
+  \centering
+  \input{gfx/Phasenrauschen.tikz}
+  \caption{Gegenüberstellung Spektrum ideal(links) und real(rechts) Oszillators nach \cite{HFKompo}}
+  \label{Oszi}
+\end{figure}
+
+Um die Oszillator-Stabilität zu bestimmen, muss zusätzlich zwischen Kurzzeitstabilität und Langzeitstabilität unterschieden werden. \\
+Die Langzeitstabilität wird insbesondere durch die Temperatur oder Alterungsprozssse beeinflusst. Dabei ändert sich die Mittenfrequenz $f_{0} $ des Oszillators. Die Kurzzeitstabilität bewirkt die Ausbreitung von Rauschseitenbändern. Dies wird durch momentane stochastische, periodische oder deterministische Schwankungen zurückgeführt\cite{HFKompo}.
+\section{Verstärker}
+Ein Verstärker bezeichnet eine Systemkomponente, welche ein  analoges Eingangsignal, in Form von Strom, Spannung oder Leistung, in ein analoges Ausgangssignal nicht zwangsläufig gleicher Art überführt und dieses aktiv verstärkt. Dabei ist die wichtigste Kenngröße die Verstärkung oder auch der Gain. Dabei wird der Gain stets über 
+\begin{center}
+Ausgangssignal $ = $ Eingangssignal $ \cdot $ Gain
+\end{center}
+beschrieben. Häufig wird Gain $G$ in dB angegeben, dabei gilt
+\begin{equation}
+\frac{G}{\text{dB}} = \text{B} \cdot \log \left( \frac{G}{\text{lin}} \right).
+\end{equation}
+Dabei ist 
+\begin{equation}
+\text{B} = \begin{cases} 20 \text{ , falls Signal Spannung oder Storm} \\ 10 \text{ , falls Signal Leistung} \end{cases}.
+\end{equation}
+Dabei unterscheiden sich verschiedene Verstärkertypen. Einige sind folgend aufgezählt.
+\begin{description}
+\item Stormverstärker \\
+	  Eingangsstrom in Ausgangsstorm
+\item Spannungsverstärker    		\\
+	  Eingangsspannung in Ausgangsspannung
+\item Transkonduktanzverstärker   \\
+	  (Eingangsspannung  in Ausgangsstrom
+\item Transimpedanzverstärker  	\\
+Eingangsstrom  in Ausgangsspannung
+\end{description}
+Zusätzlich lassen sich Verstärker bezüglich ihrer Funktion oder Verwendung  charakterisieren. Es wird sich weiterhin auf Operationsverstärker beschränkt. In Abbildung \ref{fig:OpAmp} ist ein solcher dargestellt. Operationsverstärker haben einen differentiellen Eingang und verstärken Spannungen, sind also ein Spannungsverstärker. Dabei soll die Differenz der Eingänge $U_{in,p}$ und $U_{in,n}$ die Ausgangsspannung $U_{aus}$ bestimmen. Also gilt
+\begin{equation}
+U_{aus} = G \cdot \left( U_{in,p} - U_{in,n}\right).
+\end{equation} Dabei hat der Operationsverstärker meist nur einen Ausgang. Differentielle Ausgänge werden im Anschluss durch invertieren eines Eingangs erzeugt. Invertiert wird durch einen Operationsverstärker mit $G = -1$ sowie dem negativem Input auf dem Bezugspotenzial.\\ 
+Ein Operationsverstärker benötigt eine eigene Versorgungsspannung $V_{S}$. Diese gibt die maximale Ausgangsspannung an. Die Eingangsimpedanz des Operationsverstärkers sollte hoch sein. In idealen Operationsverstärkern wird sie als $\text{Z}_{in} = \inf$ angenommen. Dagegen ist die Ausgangsimpedanz möglichst klein, in idealen Operationsverstärkern wird diese als $\text{Z}_{aus} = 0$ angenommen. Also sind beide einfließenden Ströme $I_n = I_p = 0$.
+\begin{figure}[tbp]
+  \centering
+  \input{gfx/OpAmp.tikz}
+  \caption{Symbol eines Operationsverstärker}
+  \label{fig:OpAmp}
+\end{figure}
+\subsection{Systemparameter von Operationsverstärkern}
+Reale Operationsverstärker haben einige nicht ideale Effekte. Um diese zu beschreiben, werden Operationsverstärker mit einigen Parametern beschrieben
+\begin{description}
+\item Endlicher Gain \\
+Dabei gilt es zwischen Open-Loop-Gain und Closed-Loop-Gain zu unterscheiden. Der Open-Loop-Gain bezeichnet die mögliche Verstärkung der Operationsverstärkers, wenn keine Rückführung auf die Eingänge vorhanden ist. Der Open-Loop-Gain eines idealen Operationsverstärkers ist $\inf$. Auch in realen Operationsverstärkern kann dieser Wert sehr groß werden. Der Closed-Loop-Gain wird durch die Beschaltung der Rückführung bestimmt sowie die Verhältnisse der dortigen Komponenten, meist Widerstände, definiert.
+\item Eingangsimpedanz \\
+Die differentielle Eingangsimpedanz gibt die Impedanz zwischen positiven und  negativen Eingang des Operationsverstärkers an. Die Gleichtakt Eingangsimpedanz, auch Common-Mode Impedanz, beschreibt die jeweilige Impedanz bezogen auf das Massepotenzial.
+\item Gleichtaktunterdrückung \\
+Gleichtaktunterdrückung CMR\footnote{ \textbf{C}ommon \textbf{M}ode \textbf{R}ejection} beschreibt die Änderung von $U_{aus}$ wenn sich beide Eingänge um den gleichen Wert ändern. Ein wesentliche Maß für die Qualität eines Operationsverstärkers ist die Gleichtaktunterdrückung. Dabei soll diese möglichst groß, idealerweise unendlich groß sein. Entsprechend ist die Gleichtaktverstärkung idealerweise null. 
+\item Slew Rate und Bandbreite \\
+Da ein Operationsverstärker stets seinen Eingängen folgt, ist dies nur bis zu einer maximalen Geschwindigkeit möglich. Diese Geschwindigkeit ist die Slew Rate. Ist die Änderung schneller als der Operationsverstärker, wird nicht mehr der volle Gain erreicht. Sobald der Gain um \SI{3}{dB} kleiner ist als vorgesehen, ist die Bandbreite überschritten.
+\item Ausgangsrauschen\\
+Da Operationsverstärker aktive Bauelemente sind, erzeugen diese stets auch ein eigenes Rauschen welches dem bisherigen Rauschpegel hinzugefügt wird. Ein wesentliches Qualitätsmerkmal eines Operationsverstärkers ist dabei das Ausgangsrauschen. Ein idealer Operationsverstärker hat dabei kein Ausgangsrauschen. In der Realität hängt es allerdings von Lastwiderstand sowie Gain ab. 
+\item Interception Point 3 \\
+Interception Points modellieren die in der Realität vorhandenen Nichtlinearitäten von Operationsverstärkern mit Hilfe von Polynomen niedriger Ordnung, beispielsweise einer Taylorentwicklung. Der Interception Point 3 bezeichnet demnach den Einfluss der nichtlinearen Terme dritter Ordnung. Dabei ist der Interception Point 3 keine physikalische Größe. Effektiv beschreibt der Interception Point 3 die dynamische Reichweite bzw. die Grenze davon. 
+\end{description}
+\subsection{Rauschen in Operationsverstärkern}
+Um Verstärkerrauschen zu betrachten, wird ein Ersatzschaltbild für einen Verstärker samt Rückkopplung dargestellt\ref{fig:Verstaerkerrauschen_Block}. Dabei ist $e^{\text{j}\varphi}$ das ungewollte Phasenrauschen. Die Übertragungsfunktion der Rückkopplung $\beta(\omega)$ ergibt sich aus der Schwingfrequenz des Oszillators.
+\begin{figure}[tbp]
+  \centering
+  \input{gfx/Verstaerkerrauschen_Block.tikz}
+  \caption{Blockschaltbild Zweitor Oszillator mit Verstärkung G \cite{HFKompo}}
+  \label{fig:Verstaerkerrauschen_Block}
+\end{figure}
+Nach dem Barkhausen-Kriterium\cite[S.134,135]{HFKompo} liefert, dass der Betrag der Schleifenverstärkung gleich eins sein muss. Demnach gilt
+\begin{align}
+\vert \beta ( \omega )\cdot G\vert = 1 .
+\end{align}
+Zusätzlich muss die Phasenverschiebung zwischen Eingang und Ausgang 
+\begin{align}
+\text{arg}\left( \beta ( \omega )\right) + \varphi = 2\pi n
+\end{align}
+mit n aus den natürlichen Zahlen inklusive der Null. \\
+Das Verstärkerrauschen ergibt sich aus der Summe der einzelnen Rauschanteile. Aus thermischen Rauschen, welches Frequenzunabhängig ist, ergibt sich die spektrale Leistungsdichte der Phasenschwankung \cite{HFKompo} 
+\begin{align}
+S_{\varphi , Thermisch} = 2 G \frac{kFT_{0}}{P_{0}} 
+\end{align} 
+für kleine Phasenschwankungen. Zudem ergibt sich aus dem 1/f Rauschen ein mit 1/f abfallender Anteil für niedrige Frequenzen. Daraus ergibt sich die spektrale Rauschdichte eines Verstärkers zu
+\begin{align}
+S_{\varphi}(\delta f) = \frac{\alpha_{1/f}}{(\delta f)^{-1}} + \frac{S_{\varphi , Thermisch}}{(\delta f)^{0}}.
+\end{align}
+Dabei ist $\alpha_{1/f}$ eine Konstante des 1/f Rauschens. In Bild \ref{fig:Verstaerkerrauschen} ist der Verlauf der Rauschdichte dargestellt.
+\begin{figure}[tbp]
+  \centering
+  \input{gfx/Verstärkerrauschen.tikz}
+  \caption{Verstärkerrauschen nach \cite{HFKompo}}
+  \label{fig:Verstaerkerrauschen}
+\end{figure}
+\section{Filter}
+Ein Filter ist eine Systemkomponente die die Amplitude und Phase eines Signals in Bezug in Abhängigkeit der Frequenz verändert. Dabei können Filter aktive oder passive Bauelemente sein, und auch abweichende Eigenschaften von den bereits genannten besitzen. Ein Tiefpassfilter lässt tiefe Frequenzen passieren und dämpft hohe. Hochpassfilter dämpfen entsprechend tiefe Frequenzen und lässt hohe passieren.
+\subsection{Tiefpassfilter}
+Ein Tiefpassfilter besteht aus einem Durchlass- und einem Sperrbereich. Das Filterverhalten in den jeweiligen Bereichen ist entscheiden für die Wahl des Tiefpassfiltertyps. Es sollen nur Tschebyscheff-Filter sowie Butterworth-Filter betrachtet werden, da diese den einfachsten Aufbau haben. Der Butterworth-Filter besitzt im Durchlassbereich einen flachen Amplitudenverlauf. Darum wird dieser Filtertyp auch als maximal flach bezeichnet. Der Phasenverlauf ist in diesem Bereich nahezu linear. Diese Eigenschaft ist dabei bei System besonders wichtig, welche in Bezug auf ihre Phase besondere Genauigkeit erfordern, beispielsweise Winkelschätzung bei einem Radar. Im Sperrbereich erfolgt die Dämpfung monoton. Im Zeitbereich zeichnet sich der Butterworth-Filter durch starkes Überschwingen aus. Dieses beträgt bei einem Butterworth-Filter sechster Ordnung in etwa \SI{14}{\percent}(CITATION TIETZE, S.789).\\
+Ein Tschebyscheff-Filter enthält im Durchlassbreich eine Welligkeit, sogenannte Ripple. Diese bewirken eine unterschiedliche betragsmäßige Übertragungsfunktion für verschiedene Frequenzen. Der Phasenverlauf kann nicht als linear angenommen werden. Demnach ist die Phasenänderung von der Frequenz abhängig. Im Sperrbereich nimmt die Dämpfung stärker zu als beim Butterworth-Filter. Ein Überschwingen im Zeitbereich findet nur in geringerem Ausmaß statt. In Abbildung XYZ sind beide Filtertypen in Bezugs auf den Amplitudengang sowie den Phasengang dargestellt. Die Grenze zwischen beiden Bereichern wird als Grenzfrequenz $f_{g}$ bezeichnet.
+\section{Phasenregelschleife}
+Eine Phasenregelschleife, auch PLL\footnote{ \textbf{P}hase \textbf{L}ocked \textbf{L}oop}, ist ein geschlossener Regelkreis der eine stabile Ausgangsfrequenz mit Hilfe einer Referenzfrequenz herstellt. Dabei wird eine PLL insbesondere bei der Taktgebung in Systemen verwendet. Bild \ref{fig:PLL_Blockerino} zeigt eine solche PLL als Blockschaltbild und wird weiterhin näher erläutert. Dabei wird ein Referenzfrequenzgeber, zwei Frequenzteiler, ein Phasendetektor, ein Schleifenfilter und ein Voltage Controlled Oscillator benötigt.
+\begin{figure}[tbp]
+  \centering
+  \input{gfx/PLL_Block.tikz}
+  \caption{Blockschaltbild Phasenregelkreis nach \cite{PLL_Perf}}
+  \label{fig:PLL_Blockerino}
+\end{figure}
+Grundlage bei einer PLL ist stets eine stabile Referenz-Frequenz $f_{ref}$. Häufig wird diese durch einen Quarzoszillator erhalten. Der R-Teiler teilt die Frequenz in eine niedrigere, die Kompensationsfrequenz $f_{comp}$ mit 
+\begin{align}
+f_{comp} = \frac{f_{ref}}{R}.
+\end{align} 
+Diese Frequenz ist einer der Eingänge des Phasendetektors, PD. Der Phasendetektor gibt eine Spannung die dem Phasenfehler zwischen seinen beiden Eingängen, $f_{comp}$ und $f_{n}$, entspricht .  Dabei ist $f_{n}$ die durch den N-Teiler rückgeführte Ausgangsfrequenz. Die Charge Pump CP wandelt diese Spannung dabei in einen Strom $i_{CP}$ um. Der Phasendetektor hat dabei noch einen Proportionalität-Faktor $K_{\varphi}$. $K_{\varphi}$ ist dabei die Amplitude die die Charge-Pump verarbeiten kann. Wird $i_{CP}$ mit der Impedanz des Schleifenfilters $Z(s)$ multipliziert, was dem Ohmschen Gesetz entspricht, ergibt sich für den Voltage Controlled Oscillator VCO der Eingang 
+\begin{align}
+u_{VCO,in} = i_{CP}\cdot Z(s).
+\end{align} 
+Der Schleifenfilter ist dabei ein Tiefpass um lediglich die gewünschte Spannung an den VCO anzulegen. Der VCO ist ein Spannung-zu Frequenzwandler. Dabei hat der VCO einen Proportionalität-Faktor $K_{VCO}$. Demnach gilt für $f_{aus}$
+\begin{align}
+f_{aus} = \frac{R}{N} \cdot f_{Ref}.
+\end{align} 
+Durch ein hohes $R$ sowie ein kleines $N$ lassen sich somit Frequenzen in nahezu beliebiger Höhe erreichen, welches durch Referenzquarze nicht möglich ist, da diese häufig nur bis \SI{200}{\mega\hertz} verfügbar sind. Zusätzlich lässt sich dadurch eine niedrige Referenzfrequenz verwenden. Diese sind stabil und demnach ergibt sich geringeres Phasenrauschen am VCO.\\
+Häufig wird der Begriff PLL für das gesamte Bild \ref{fig:PLL_Blockerino} verwendet, mit Ausnahme von Referenzquarz und VCO. Diese sind nach \cite[S.10]{PLL_Perf} schwer auf einen PLL Chip zu integrieren.\\
+Entscheidende Parameter für die Leistung der PLL sind das Phasenrauschen und die Einrastzeit. Wesentlich für das Phasenrauschen ist dabei der N-Teiler Wert. Je kleiner dieser Wert desto kleiner das Phasenrauschen \cite[S.10]{PLL_Perf} . Die Einrastzeit ist die Dauer die die PLL für die Frequenzänderung benötigt, wenn der Wert des N-Teilers geändert wird.

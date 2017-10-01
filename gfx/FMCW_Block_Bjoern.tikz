@@ -1,0 +1,90 @@
+\tikzset{%
+	% Self defined bulding blocks. 
+	% Nevertheless circutikz has implemented filters, couplers and other components since version 0.4, they are mostly implemented as bipoles.
+	% The usage of bipoles: \draw (start) to[lowpass/amp/adc,....] (end).
+	% The problem is, that if one wants to use arrows, the arrows in bipoles can not be sat manual (fixed in circuitikz source) AND THEY ARE NOT CONSISTENT
+	% Also it's quite a mess, which component is a monopole, simple block, bipol, quad/triple etc
+	% Following are a few examples on how to define your own blocks. 
+	%
+	% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+	% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+	% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+	% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+	%
+	% Standard block definition, the width and height is adopted from the circutizk source code, so don't mind the strange values. Also the linewidth is set according to the circutrikz source code.
+	block/.style    	= 	{draw, fill=white, thick, rectangle, minimum height = 0.98cm, minimum width = 0.98cm, node distance=2.5cm, line width=1.5pt},
+	%
+	% Standard circular block
+	circleblock/.style	= 	{draw, fill=white, thick, circle, minimum width = 0.98cm,  line width=1.5pt, node distance=2.5cm},
+	%
+	% Label for circuitikz nodes, as they're reference is in the middle and not on the outer edge of the node....
+	circuitikzlabel/.style	=	{label={[label, label distance=0.5cm]#1}},
+	%
+	%
+	%
+	% VCO/Oscillator 
+	myVCO/.style			= 	{circleblock, path picture={%
+		\draw[line width=0.75pt] 	($(path picture bounding box.west)+(0.09cm,0)$) sin ($(path picture bounding box.center)-(0.2cm,-0.2cm)$) cos  (path picture bounding box.center) sin ($(path picture bounding box.center)-(-0.2cm,0.2cm)$) cos ($(path picture bounding box.east)-(0.09cm,0)$);
+		}
+	},
+	% Amplifier, as circuitikz does only provite amplifiers as 2-ports/bipoles
+	myAMP/.style		= 	{block, node distance=2.5cm, path picture={%
+		\draw[fill=white, line width=0.75pt] ($(path picture bounding box.center)+(0.7em,0)$) -- ($(path picture bounding box.center)-(0.7em,-0.7em)$) -- ($(path picture bounding box.center)-(0.7em,0.7em)$)  -- cycle;
+		}
+	},
+	% Block	
+	myBlock/.style    	= 	{draw, fill=white, thick, rectangle, minimum height = 0.98cm, minimum width = 0.98cm, node distance=2.5cm, line width=1.5pt},
+	myBigBlock/.style    	= 	{draw, fill=white, thick, rectangle, minimum height = 0.98cm, minimum width = 2.94cm, node distance=2.5cm, line width=1.5pt},	
+	% Same for ADC
+	myADC/.style 	=	{block, path picture={%
+		\draw[line width=0.75pt] 	(path picture bounding box.south west) -- (path picture bounding box.north east);
+		\node[] at ($(path picture bounding box.center)+(-.5em,.5em)$) () {D};
+		\node[] at ($(path picture bounding box.center)+(.5em,-.5em)$) () {A};
+		} 
+	},
+	% Same for filters
+	myLP/.style	=	{block, path picture={%
+		%Sine-Waves
+		\draw[line width=.75pt] 	($(path picture bounding box.west)+(0.3em,0)$) sin ($(path picture bounding box.center)-(0.50em,-0.3em)$) cos  (path picture bounding box.center) sin ($(path picture bounding box.center)-(-0.50em,0.3em)$) cos ($(path picture bounding box.east)-(0.3em,0)$);
+		\draw[line width=0.75pt] 	($(path picture bounding box.west)+(0.3em,-0.65em)$) sin ($(path picture bounding box.center)-(0.50em,0.35em)$) cos  ( $(path picture bounding box.center)-(0,0.65em)$) sin ($(path picture bounding box.center)-(-0.50em,0.95em)$) cos ($(path picture bounding box.east)-(0.3em,0.65em)$);
+		\draw[line width=0.75pt] 	($(path picture bounding box.west)+(0.3em,0.65em)$) sin ($(path picture bounding box.center)-(0.50em,-0.95em)$) cos  ( $(path picture bounding box.center)+(0,0.65em)$) sin ($(path picture bounding box.center)-(-0.50em,-0.35em)$) cos ($(path picture bounding box.east)-(0.3em,-0.65em)$);
+		% Cancelation
+		\draw[line width=0.75pt] 	($(path picture bounding box.center)-(0.2em,0.2em)$) -- (path picture bounding box.center) -- ($(path picture bounding box.center)+(0.2em,0.2em)$) ;
+		\draw[line width=0.75pt] 	($(path picture bounding box.center)-(0.2em,-0.45em)$) -- ($(path picture bounding box.center)+(0,0.65em)$) -- ($(path picture bounding box.center)+(0.2em,0.85em)$) ;
+		}
+	},
+}
+\begin{tikzpicture}[line width=0.7pt,>=latex,node distance=2.5cm]
+	% First: All building blocks are placed relative to the first component
+	\draw (0,0)
+		node[myVCO, label={above:Frequenzmodulator}] (oszi) {}
+		% As the coupler ports are not in the middle, based on the size (again extraceted from circutikz source code), an yshift is perfomed to have the input on the same height as the output of the oszillator. The xshift is used to place the VCO and ADC on the same y-value after all.
+		% Undo the yshift as the output of the coupler is on the same height as the input of the amplifier
+		node[myBlock, right of=oszi,  node distance=5cm, label={above:Sender}] (pa) {$P_{S}$}
+		% Circulator is rotated that the ports are on the correct position, normally ports are arranged as follows:
+		% 
+		%				  o------------o
+		%						|
+		%						o
+		node[circulator, below right of=pa, xshift = 3cm, rotate=90,] (circ) {}
+		node[antenna, right of = circ] (antenna) {}
+		node[myBlock, below left of=circ,  label={below:Empfänger}] (lna) {$P_{E}$}
+		% Used redefinition of label, otherwise the label would be overlapping with the mixer shape
+		node[mixer, below of=pa,yshift = -1cm  , circuitikzlabel={below:Mischer}] (mixer) {}
+		node[myLP, left of=mixer, label={below:Tiefpass}] (lowpass) {}
+		node[myADC, left of = lowpass,node distance=2.5cm, label ={below:Signalverarbeitung}](Sig){}		
+		;
+		
+	% Connect everything together
+	\draw[->] (oszi) -- node[above]{$u_{S}(t)$}(pa.west);
+
+	%\draw[] (coupler.1) -| ++(-0.5cm,-0.1cm) node[match, rotate=-90, yscale=-1] {};
+	\draw[->] (pa.east) -| node[above left]{$u_{S}(t)$}(circ.2);
+	\draw[-] (circ.3) -- (antenna);
+	\draw[->] (circ.1) |- node[above left]{$u_{E}(t)$}(lna.east);
+	\draw[->] (lna.west) -- node[above]{$u_{E}(t)$}(mixer.east);
+	\draw[->] (mixer.west)  --  (lowpass.east);
+	\draw[->] (lowpass.west) -- node[above]{$u_{ZF}(t)$}(Sig.east);
+	\draw[->] (pa.south) -- node[right]{$u_{S}(t)$}(mixer.north);
+
+\end{tikzpicture}

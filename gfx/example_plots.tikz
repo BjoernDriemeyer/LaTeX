@@ -1,0 +1,110 @@
+%%
+% Für Fragen wenden an
+% Fabian Roos, fabian.roos@uni-ulm.de / studium@froos.de
+%%
+
+% Plotting a Function
+% \begin{tikzpicture}
+%   \begin{axis}[
+%       % enlargelimits = false,
+%       grid = major,
+%       % xmin = 0,
+%       % xmax = 3,
+%       % xtick = {0,0.5,1,...,3},
+%       title = {In Document Use Caption Instead Of Title},
+%       xlabel = {$t$ in \si{\micro\second}},
+%       ylabel = {Voltage in \si{\volt}},
+%     ]
+
+%     \addplot[
+%       blue,
+%       domain = -pi:pi,
+%       samples = 100,
+%     ]{x + sin(deg(x))}; % input of sin() in degree
+
+%   \end{axis}
+% \end{tikzpicture}
+
+
+% Plotting Data
+\begin{tikzpicture}
+  \begin{axis}[
+      % enlargelimits = false,
+      grid = major,
+      xlabel = {Samples},
+      ylabel = {Power in \si{\decibel}},
+      % title = {In Document Use Caption Instead Of Title},
+      legend pos = north west,
+      legend cell align = left,
+      % legend columns = -1,
+      cycle list name = roos,
+      no markers,
+    ]
+
+    % if brackets are used, the cycle list is deativated. Activate it with a +
+    \addplot+[
+    ]
+    table[col sep = comma]{gfx/example_plots.csv};
+
+    % no brackets uses the cycle list
+    \addplot
+    table[x index = 0, y index = 2, col sep = comma]{gfx/example_plots.csv};
+
+    \addlegendentry{simulation};
+    \addlegendentry{measurement};
+  \end{axis}
+\end{tikzpicture}
+
+
+% % Plotting Data: Scatter Plots
+% \begin{tikzpicture}
+%   \begin{axis}
+%     [
+%       % enlargelimits = false,
+%       grid = major,
+%       xlabel = {Samples},
+%       ylabel = {Power in \si{\decibel}},
+%       % title = {In Document Use Caption Instead Of Title},
+%       % colormap/jet,
+%       colorbar,
+%     ]
+%     \addplot[
+%       scatter,
+%       scatter src = explicit,
+%       only marks,
+%     ]
+%     table[x index = 0, y index = 1, meta index = 2, col sep = comma]{gfx/example_plots.csv};
+%   \end{axis}
+% \end{tikzpicture}
+
+
+% % Plotting Data: Scatter Plot with variable marker colour AND size
+% % Data Structure used
+% % -> 1. column: x values
+% % -> 2. column: y values
+% % -> 3. column: colour of markers
+% % -> 4. column: size of markers
+% % Source: Using the size: http://tex.stackexchange.com/questions/98646/
+% % Source: No need for nameing the columns because of \thisrowno{}
+% %         http://tex.stackexchange.com/questions/41033/
+% \begin{tikzpicture}
+%   \begin{axis}[
+%       % enlargelimits = false,
+%       grid = major,
+%       xlabel = {Samples},
+%       ylabel = {Power in \si{\decibel}},
+%       colorbar,
+%     ]
+
+%     \addplot[
+%       scatter,
+%       only marks,
+%       scatter src=explicit,
+%       visualization depends on=\thisrowno{3}\as\wtwo,
+%       scatter/@pre marker code/.append style={%
+%         /tikz/mark size=\wtwo
+%       }
+%     ]
+%     table[x index=0, y index=2, meta index=2, col sep=comma]{gfx/example_plots.csv};
+%   \end{axis}
+% \end{tikzpicture}

@@ -1,0 +1,134 @@
+\tikzset{%
+	% Self defined bulding blocks. 
+	% Nevertheless circutikz has implemented filters, couplers and other components since version 0.4, they are mostly implemented as bipoles.
+	% The usage of bipoles: \draw (start) to[lowpass/amp/adc,....] (end).
+	% The problem is, that if one wants to use arrows, the arrows in bipoles can not be sat manual (fixed in circuitikz source) AND THEY ARE NOT CONSISTENT
+	% Also it's quite a mess, which component is a monopole, simple block, bipol, quad/triple etc
+	% Following are a few examples on how to define your own blocks. 
+	%
+	% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+	% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+	% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+	% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+	%
+	% Standard block definition, the width and height is adopted from the circutizk source code, so don't mind the strange values. Also the linewidth is set according to the circutrikz source code.
+	block/.style    	= 	{draw, fill=white, thick, rectangle, minimum height = 0.98cm, minimum width = 0.98cm, node distance=2.5cm, line width=1.5pt},
+	%
+	% Standard circular block
+	circleblock/.style	= 	{draw, fill=white, thick, circle, minimum width = 0.98cm,  line width=1.5pt, node distance=2.5cm},
+	%
+	% Label for circuitikz nodes, as they're reference is in the middle and not on the outer edge of the node....
+	circuitikzlabel/.style	=	{label={[label, label distance=0.5cm]#1}},
+	%
+	%
+	%
+	% VCO/Oscillator 
+	myVCO/.style			= 	{circleblock, path picture={%
+		\draw[line width=0.75pt] 	($(path picture bounding box.west)+(0.09cm,0)$) sin ($(path picture bounding box.center)-(0.2cm,-0.2cm)$) cos  (path picture bounding box.center) sin ($(path picture bounding box.center)-(-0.2cm,0.2cm)$) cos ($(path picture bounding box.east)-(0.09cm,0)$);
+		}
+	},
+	% Amplifier, as circuitikz does only provite amplifiers as 2-ports/bipoles
+	myAMP/.style		= 	{block, node distance=2.5cm, path picture={%
+		\draw[fill=white, line width=0.75pt] ($(path picture bounding box.center)+(0.7em,0)$) -- ($(path picture bounding box.center)-(0.7em,-0.7em)$) -- ($(path picture bounding box.center)-(0.7em,0.7em)$)  -- cycle;
+		}
+	},%%
+	% Block	
+	myBlock/.style    	= 	{draw, fill=white, thick, rectangle, minimum height = 0.98cm, minimum width = 0.98cm, node distance=2.5cm, line width=1.5pt},
+	myBigBlock/.style    	= 	{draw, fill=white, thick, rectangle, minimum height = 0.98cm, minimum width = 2.94cm, node distance=2.5cm, line width=1.5pt},	
+	% Same for ADC
+	myADC/.style 	=	{block, path picture={%
+		\draw[line width=0.75pt] 	(path picture bounding box.south west) -- (path picture bounding box.north east);
+		\node[] at ($(path picture bounding box.center)+(-.5em,.5em)$) () {D};
+		\node[] at ($(path picture bounding box.center)+(.5em,-.5em)$) () {A};
+		} 
+	},
+	% Same for filters
+	myLP/.style	=	{block, path picture={%
+		%Sine-Waves
+		\draw[line width=.75pt] 	($(path picture bounding box.west)+(0.3em,0)$) sin ($(path picture bounding box.center)-(0.50em,-0.3em)$) cos  (path picture bounding box.center) sin ($(path picture bounding box.center)-(-0.50em,0.3em)$) cos ($(path picture bounding box.east)-(0.3em,0)$);
+		\draw[line width=0.75pt] 	($(path picture bounding box.west)+(0.3em,-0.65em)$) sin ($(path picture bounding box.center)-(0.50em,0.35em)$) cos  ( $(path picture bounding box.center)-(0,0.65em)$) sin ($(path picture bounding box.center)-(-0.50em,0.95em)$) cos ($(path picture bounding box.east)-(0.3em,0.65em)$);
+		\draw[line width=0.75pt] 	($(path picture bounding box.west)+(0.3em,0.65em)$) sin ($(path picture bounding box.center)-(0.50em,-0.95em)$) cos  ( $(path picture bounding box.center)+(0,0.65em)$) sin ($(path picture bounding box.center)-(-0.50em,-0.35em)$) cos ($(path picture bounding box.east)-(0.3em,-0.65em)$);
+		% Cancelation
+		\draw[line width=0.75pt] 	($(path picture bounding box.center)-(0.2em,0.2em)$) -- (path picture bounding box.center) -- ($(path picture bounding box.center)+(0.2em,0.2em)$) ;
+		\draw[line width=0.75pt] 	($(path picture bounding box.center)-(0.2em,-0.45em)$) -- ($(path picture bounding box.center)+(0,0.65em)$) -- ($(path picture bounding box.center)+(0.2em,0.85em)$) ;
+		}
+	},
+}
+\begin{tikzpicture}[line width=0.7pt,>=latex,node distance=2.5cm,scale = 0.8]
+	% First: All building blocks are placed relative to the first component
+	\draw (0,0)
+		node[myVCO, label={below: Oszillator}] (Ref) {};
+	\draw (0,2)
+		node[myBlock] (Ref1) {1/32};
+	\draw (2,0)
+		node[myAMP] (Ref2) {};
+	\draw (4,2)
+		node[myAMP] (Ref3) {};
+	\draw (4,0)
+		node[myAMP] (Ref4) {};
+	\draw (6,-2)
+		node[myBlock] (Ref5) {90$^\circ$};
+	\draw (8,-4)
+		node[mixer] (Ref6) {};
+	\draw (8,-6)
+		node[mixer] (Ref7) {};
+	\draw (10,-4)
+		node[myAMP, rotate = 180, label={above:LNA}] (Ref8) {};
+	\draw (11,-4)
+		node[rxantenna, label={below right:RX}] (Ref10) {};
+	\draw (11,2)
+		node[txantenna, label={below right:TX}] (Ref9) {};
+		
+	%Connections
+	\draw[->](Ref)--(Ref1);
+	\draw[->](Ref)--(Ref2);
+	\draw[-](Ref2)--(3,0);
+	\draw[->](3,0)|-(Ref3);
+	\draw[->](3,0)--(Ref4);
+	\draw[->](Ref4)-|(Ref5);
+	\draw[->](Ref4)-|(Ref6.north);
+	\draw[-](Ref5)|- (8,-5);
+	\draw[->](8,-5)--(Ref7.north);
+	\draw[-](Ref8.east)--(9,-4);
+	\draw[->](9,-4)--(Ref6.east);
+	\draw[->](9,-4)|-(Ref7.east);
+	\draw[-](Ref10)--(Ref8.west);
+	\draw[-](Ref6.west)--(0,-4);
+	\draw[-](Ref7.west)--(0,-6);
+	\draw[->](0,-4)--node[above left]{$\text{IF}_{\text{I}}$}node[below left]{(differentiell)}(-2,-4);
+	\draw[->](0,-6)--node[above left]{$\text{IF}_{\text{Q}}$}node[below left]{(differentiell)}(-2,-6);
+	\draw[-](Ref9)--(Ref3);
+	
+	
+	%Div_o
+	\draw[->](Ref1)--node[above left]{$\text{div}_{\text{out}}$}node[below left]{(differentiell)}(-2,2);
+	%Oszi In
+	\draw[->](-2,0)--node[above left]{$\text{V}_{\text{fein}}$}node[below left]{$\text{V}_{\text{grob}}$, 3Bit}(Ref);
+		
+	
+	%Blue Box
+	\draw[dashed,blue,-](-1,8)--(-1,-8);
+	\draw[dashed,blue,-](-1,-8)--(15,-8);
+	\draw[dashed,blue,-](-1,8)--(15,8);
+	\draw[dashed,blue,-](15,8)--(15,-8);	
+	
+	%Control Unit
+	\draw[-](0,7)--(0,5);
+	\draw[-](0,5)--(9,5);
+	\draw[-](9,5)--(9,7);
+	\draw[-](9,7)--(0,7);
+	%Output Control Unit
+	\draw[->](0,6)--node[above left]{deto}node[below left]{(differentiell)}(-2,6);	
+	%Input Control Unit	
+	\draw[-](1,7)--node[above left]{s3}(1,9);
+	\draw[-](2,7)--node[above left]{s2}(2,9);
+	\draw[-](3,7)--node[above left]{s1}(3,9);
+	\draw[-](4,7)--node[above left]{s0}(4,9);
+	\draw[-](6,7)--node[above left]{$\text{div}_{\text{en}}$}(6,9);
+	\draw[-](8,7)--node[above left]{$\text{buf}_{\text{en}}$}(8,9);
+	%Text Control Unit
+	\draw(4.5,6.5)
+		node[label ={below:Control Unit}] (Ref1337) {};
+
+
+\end{tikzpicture}

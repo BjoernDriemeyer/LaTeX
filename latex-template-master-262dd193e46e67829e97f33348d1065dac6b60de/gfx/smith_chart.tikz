@@ -1,0 +1,90 @@
+% Smith Chart Example
+% by Fabian Roos (Plotting) and Philipp Hügler (RF matching)
+% 29.02.2016
+
+\begin{tikzpicture}
+  \begin{smithchart}
+    % start at point (0.2 + 0.5i) and mirror the point to (0.6897 - 1.7241i)
+    % -> calculate the mirrored point by 1/(...)
+    \addplot[
+      gray,
+      dashed,
+      ->,
+      mark=x,
+      mark options={black,solid},
+    ]
+    coordinates{%
+      (0.2,0.5)
+      (0.6897,-1.7241)
+    };
+
+    % rotate with a parallel C
+    % -> start from 1/(...) and add 1i*omega*C
+    % -> calculate points and import them from a csv file
+    \addplot[
+      red,
+      ->,
+      no markers,
+    ]
+    table[col sep = comma]{gfx/smith_chart.csv};
+
+    % mirror the endpoint
+    \addplot[
+      gray,
+      dashed,
+      ->,
+      mark=x,
+      mark options={black,solid},
+    ]
+    coordinates{%
+      (0.6897,0.4624) (1.0003,-0.6707)
+    };
+
+    % rotate with a serial L
+    % -> start from the endpoint of the prvious rotation and add 1i*omega*L
+    % -> calculate points and import them from a csv file
+    \addplot[
+      blue,
+      ->,
+      no markers,
+    ]
+    table[col sep = comma, x index = 2, y index = 3]{gfx/smith_chart.csv};
+  \end{smithchart}
+\end{tikzpicture}
+
+% created with the following Matlab Script
+% -> predefined C and L values with Simulator by Hügler
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%% Fabian Roos, fabian.roos@uni-ulm.de %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%                                                                     %%%
+% %%% Matlab Script for Obtaining Coordinates                             %%%
+% %%%                                                                     %%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%% Revisions:                                                          %%%
+% %%% 29.02.16: * basic version                                           %%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% clear
+% clc
+% 
+% % define the omega
+% omega = 2*pi*10e9;
+% 
+% % this is the start impedance value
+% imp = 0.2+0.5i;
+% 
+% % the two precalculated target values for the rotation
+% C = linspace(0, 696e-15*50); % admitance plane: * 50
+% L = linspace(0, 534e-12/50); % impedance plane: / 50
+% 
+% % the starting impedance is the mirrord one (admitance plane)
+% % -> and then use i*omega*C (admitance plane!)
+% imp_para_c = 1/imp + (1i*omega*C);
+% 
+% % the end point is mirrored end point of the C rotation
+% % -> and then use i*omega*L (impedance plane!)
+% imp_seriel_L = 1/(imp_para_c(end)) + 1i * omega * L;
+% 
+% % save the two rotations with the real and imaginary parts
+% exp_vec = [real(imp_para_c).', imag(imp_para_c).', real(imp_seriel_L).' imag(imp_seriel_L).'];
+% csvwrite('smith_chart.csv', exp_vec)
+% system('mv smith_chart.csv ~/Documents/wip/')

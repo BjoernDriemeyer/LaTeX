@@ -1,0 +1,37 @@
+\chapter{Gesamtkonzept}
+\section{Aufbau}
+Der Aufbau des Radarsystems ist Modular. Die einzelnen Bausteine sind dabei entsprechende Platinen mit definierter Funktion. Einzelne quadratischen Platinen haben eine Seitenlänge von \SI{8}{c\metre}.\\
+ Verbunden sind die einzelnen Module durch \SI{1.27}{m\metre} SMC Connector der Firma ERNI. Diese ermöglichen Datenraten von bis zu \SI{3}{Gbit/s} und sind demnach für die geplanten Datenraten von maximal mehreren hundert MHz ausreichend. 
+\begin{figure}[tbp]
+  \centering
+  \input{gfx/Gesamtkonzept_Grob.tikz}
+  \caption{\SI{122}{G\hertz} Radarsystem - schematischer Aufbau}
+  \label{fig:Gesamtkonzept_Grob}
+\end{figure} 
+Der maximale Storm pro Pin sind \SI{1.7}{\ampere}. Die Einfügedämpfung ist laut Datenblatt in einem Bereich bis \SI{4}{\giga\hertz} stets unter \SI{0.4}{dB}. Übersprechen ist  bei nebeneinander liegenden differentiellen Signalen im Bereich bis \SI{4}{\giga\hertz} stets unter \SI{-15}{dB}. Bei Frequenzen im MHz-Bereich ist Übersprechen stets unter \SI{-30}{dB} und somit hat die Pinbelegung praktisch keinen Einfluss auf die Signalqualität. 
+Es wurden pro benötigte Platinenseite 4 Pinleisten verwendet. Dabei je zwei Leisten mit 26 Pins und zwei Leisten mit 12 Pins. Falls sowohl die Unterseite als auch die Oberseite des Boards beschaltet wird sind auf beiden Seiten 4 Pinleisten vorzufinden. Dementsprechend benötigen die unterste sowie die oberste Platine nur 4 Pinleisten um die Funktionalität mit den restlichen \SI{8}{c\metre} Platinen gewährleisten.\\
+Das Radarsystem ist nicht in sich geschlossen. Verbindungen aus dem System werden über SMA Verbinder der Firma Molex hergestellt. Diese sind bei RF-Anwendungen üblich. \\
+In Bild \ref{fig:Gesamtkonzept_Grob} ist der schematische Aufbau dargestellt. Dabei bildet der Mikrocontroller das unterste Modul. Auf dem Mikrocontroller ist die Versorgungsplatine aufgesteckt. Diese stellt die für das System benötigten Ströme und Spannungen bereit. Darüber ist die Zwischenfrequenzplatine, welche die Signalkonditionierung vor dem ADC vornimmt. Darüber ist die Phasenregelkreisplatine. Diese stellt die für den Radarchip benötigten Signale bereit. Darauf befindet sich die kleinere Radarplatine. Diese ist von den Abmessungen kleiner und wird separat vorgestellt. Optional ist eine dieeletrische Linse zu platzieren. \\
+Die Signalkonditionierung verwendet in erster Stufe ein ADF4937-2 Operationsverstärker ausgelegt auf \SI{10}{dB} Gain. Die zweite Stufe ist ein programmierbarer HMC960 Verstärker der zwischen \SI{0}{dB} und \SI{40}{dB} Gain in \SI{0.5}{dB} Schritten erzeugt. Die dritte Stufe ist ein HMC900 ein programmierbarer Tiefpass mit \SI{0}{dB} oder \SI{10}{dB} Gain. Als vierte und letzte Systemstufe ist ein AD8034 Operationsverstärker. Dieser konvertiert die bis dahin differentiell geführten Signale in einfache, auf einer Datenbahn geführten Signale. Der AD8034 ist mit \SI{10}{dB} auslegt. Sämtliche Komponenten sind von der Firma Analog Devices.\\
+Der Phasenregelkreis wird durch eine Kombination des ADF4159 der Firma Analog Devices zur Frequenzgenerierung sowie einem LTC6954 der Firma Linear Technology als Takt-Teiler in Kombination mit dem spannungsgesteuerten
+Oszillator  auf dem Radarchip hergestellt. Dabei ist der ADF4159 zur Rampengenerierung notwendig. Optional soll der LTC6954 entweder über ein Referenzquarz oder über einen externen Takt angesteuert werden.
+\section{Radarchip}
+Der in dieser Arbeit verwendete Radarchip(TRX 120 06 von Silicon-Radar) ist ein Sende-Empfangssystem für das ISM-Band(\SI{122}{G\hertz}.  Low-Noise-Ampflifier, Quadratur-Mischstufe, Mehrphasenfilter, VCO sowie 1/32 Frequenzteiler sind bereits Teil des Systems. 
+\subsection{Funktionsweise Radarchip}
+Das Blockschaltbild ist in Bild \ref{fig:Radarchip} dargestellt. Der spannungsgesteuerte Oszillator wird durch Grob-und Feinabstimmung eingestellt. Dabei mit einer 3 Bit großen Grobabstimmung $\text{V}_{\text{grob}}$ sowie mit einer 1 Bit großen Feinabstimmung $\text{V}_{\text{fein}}$ die gewünschte Frequenz eingestellt werden. Durch entsprechende Kombination der Eingänge können sehr große Bandbreiten von bis zu \SI{7}{G\hertz} erreicht werden. Zusätzlich kann der Sendesignalpegel mit Hilfe von zwei Leistungsdetektoren zwischen dem Verstärker und der Sendeantenne gemessen werden. Das Empfangssignal wird zunächst durch einen LNA verstärkt und anschließend mit Hilfe der Quadratur-Mischstufe in das Basisband konvertiert. Diese beiden Signale, $\text{IF}_{\text{I}}$ und $\text{IF}_{\text{Q}}$, werden dabei jeweils differentiell geführt. Ein Teil der Oszillator-Frequenz wird durch den 1/32 Frequenzteiler differentiell ausgegeben. Dieser Ausgang kann, falls die Verwendung ein FMCW-Radar sein soll, in einen Phasenregelkreis eingegeben werden und damit die Funktionalität sicherstellen.
+\begin{figure}[tbp]
+  \centering
+  \input{gfx/Radarchip_Block.tikz}
+  \caption{Blockschaltbild \SI{122}{G\hertz}Radarchip(QUELLE)}
+  \label{fig:Radarchip}
+\end{figure}
+\subsection{Anwendung}
+Der Radarchip kann sowohl als FMCW-Radar auch als CW-Radar ,über die Beschaltung des Oszillators, betrieben des Oszillator werden. Bei konstanter Oszillator-Frequenz entspricht dies dem Betrieb als CW-Radar, andernfalls wird der Radarchip als FMCW-Radar betrieben. \\
+Der TXR kann für Reichweiten von bis zu \SI{10}{m} verwendet werden. Mit Hilfe dieelektrischer Linsen kann die Reichweite zusätzlich erhöht werden. Als FMCW-Radar sind Bandbreiten bis \SI{7}{G\hertz} möglich, wobei der Chip auf die Verwendung im ISM Band von \SI{122}{G\hertz} bis \SI{123}{G\hertz} ausgelegt ist.
+\subsection{Versorgung und Beschaltung}
+Der Radarchip wird auf eine eigene Platine aufgesetzt, bildet dadurch die oberste Komponente des Radarsystems, und durch diese beschaltet. Die Verbindung zu dem darunterliegenden Board wird über zwei zweireihige \SI{2.0}{m\metre} Pinleisten mit jeweils insgesamt 20 Pins hergestellt.\\
+Beide Zwischenfrequenzsignale $\text{IF}_{\text{I}}$ und $\text{IF}_{\text{Q}}$, der Teiler Ausgang $\text{div}_{\text{out}}$ sowie der Multiplexer Ausgang deto werden differentiell geführt. $\text{div}_{\text{out}}$ wird über MML ausgeführt. Deto wird durch die vier Kontrollsignale s0, s1,  s2, und s3 gesteuert. $\text{div}_{\text{en}}$ und $\text{buf}_{\text{en}}$ schalten dabei den Frequenzteiler und die Buffer ein. Die Kontrollspannung am Oszillator wird durch ein Widerstandsnetzwerk eingestellt. Einzelne Widerstände können dabei je nach Bedarf als Bestückoption offen gelassen werden.\\
+Das Radarsystem kann mit der im Chip integrierten monostatischen Antenne beschaltet werden. Es ist auch möglich, extern Antennen anzuschließen. Dieser Fall ist in Bild \ref{fig:Gesamtkonzept_Grob} dargestellt. \\
+Wesentlich für die Funktionalität des Radarsystems ist der Referenztakt. Damit die Kombination aus Radar-Platine und Phasenregelkreis funktioniert, ist geringes Phasenrauschen erforderlich, da sich beide Komponenten auf den Referenztakt beziehen. Falls dort Phasenfehler auftreten, ist Kohärenz nicht gegeben.
+\section{Mikrocontroller}
+Die Radarsteuerung wird über einen Mikrocontroller, ein STM32f303, vorgenommen. Dieser 32 Bit Mikrocontroller kann bis zu \SI{84}{M\hertz} takten . Die SPI-Interfaces können Datenraten von bis zu \SI{42}{Mbit/s} verarbeiten.
